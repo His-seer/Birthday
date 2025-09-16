@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Website Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <div class="admin-container">
+        <header class="admin-header">
+            <h1><i class="fas fa-birthday-cake"></i> Birthday Website Admin</h1>
+            <div class="header-actions">
+                <button id="previewBtn" class="btn-primary">
+                    <i class="fas fa-eye"></i> Preview Site
+                </button>
+            </div>
+        </header>
+        
+        <div class="admin-tabs">
+            <button class="tab-btn active" data-tab="photos">
+                <i class="fas fa-images"></i> Photos
+            </button>
+            <button class="tab-btn" data-tab="video">
+                <i class="fas fa-video"></i> Video
+            </button>
+            <button class="tab-btn" data-tab="timeline">
+                <i class="fas fa-timeline"></i> Timeline
+            </button>
+            <button class="tab-btn" data-tab="messages">
+                <i class="fas fa-edit"></i> Messages
+            </button>
+            <button class="tab-btn" data-tab="colors">
+                <i class="fas fa-palette"></i> Colors
+            </button>
+        </div>
+        
+        <!-- Photo Management Tab -->
+        <div class="tab-content active" id="photos-tab">
+            <div class="upload-section">
+                <h2>Photo Gallery <span class="photo-count">(0/30 photos)</span></h2>
+                <div class="drop-zone" id="photoDropZone">
+                    <div class="drop-zone-content">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Drag & drop photos here or click to browse</p>
+                        <small>Maximum 30 photos, 50MB each. JPG, PNG, GIF supported.</small>
+                    </div>
+                    <input type="file" id="photoInput" multiple accept="image/*" hidden>
+                </div>
+                
+                <div class="photo-actions">
+                    <button id="clearAllPhotos" class="btn-danger" style="display: none;">
+                        <i class="fas fa-trash"></i> Clear All Photos
+                    </button>
+                </div>
+                
+                <div class="photo-grid" id="photoGrid">
+                    <!-- Photos will be dynamically loaded here -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Video Management Tab -->
+        <div class="tab-content" id="video-tab">
+            <div class="upload-section">
+                <h2>Birthday Video</h2>
+                <div class="drop-zone" id="videoDropZone">
+                    <div class="drop-zone-content">
+                        <i class="fas fa-video"></i>
+                        <p>Upload birthday message video</p>
+                        <small>MP4, WebM, AVI supported. Maximum 100MB.</small>
+                    </div>
+                    <input type="file" id="videoInput" accept="video/*" hidden>
+                </div>
+                <div id="videoPreview" class="video-preview">
+                    <!-- Video preview will be shown here -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Timeline Management Tab -->
+        <div class="tab-content" id="timeline-tab">
+            <div class="timeline-editor">
+                <h2>Timeline Events</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 2rem; text-align: center;">
+                    Create timeline events with flexible content - add text, images, videos, or combine them to tell your story.
+                </p>
+                <button id="addTimelineEvent" class="btn-primary">
+                    <i class="fas fa-plus"></i> Add New Event
+                </button>
+                <div id="timelineEvents" class="timeline-events">
+                    <!-- Timeline events editor -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Messages/Text Management Tab -->
+        <div class="tab-content" id="messages-tab">
+            <div class="messages-editor">
+                <h2>Edit Website Text Content</h2>
+                
+                <!-- Hero Section -->
+                <div class="text-section">
+                    <h3><i class="fas fa-star"></i> Hero Section</h3>
+                    <div class="form-group">
+                        <label for="heroTitle">Birthday Person's Name</label>
+                        <input type="text" id="heroTitle" placeholder="Happy Birthday [Name]!" class="text-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="heroSubtitle">Hero Subtitle</label>
+                        <input type="text" id="heroSubtitle" placeholder="Celebrating another amazing year..." class="text-input">
+                    </div>
+                </div>
+                
+                <!-- Section Titles -->
+                <div class="text-section">
+                    <h3><i class="fas fa-heading"></i> Section Titles</h3>
+                    <div class="form-group">
+                        <label for="galleryTitle">Gallery Section Title</label>
+                        <input type="text" id="galleryTitle" placeholder="Our Beautiful Memories" class="text-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="gallerySubtitle">Gallery Section Subtitle</label>
+                        <input type="text" id="gallerySubtitle" placeholder="A collection of moments that make life special" class="text-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="timelineTitle">Timeline Section Title</label>
+                        <input type="text" id="timelineTitle" placeholder="Our Journey Together" class="text-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="timelineSubtitle">Timeline Section Subtitle</label>
+                        <input type="text" id="timelineSubtitle" placeholder="Milestones and memories that shaped our story" class="text-input">
+                    </div>
+                </div>
+                
+                <!-- Birthday Message -->
+                <div class="text-section">
+                    <h3><i class="fas fa-heart"></i> Birthday Message</h3>
+                    <div class="form-group">
+                        <label for="messageTitle">Message Title</label>
+                        <input type="text" id="messageTitle" placeholder="Happy Birthday, [Name]! 🎂" class="text-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="messageText1">Message Line 1</label>
+                        <textarea id="messageText1" placeholder="You light up every room with your incredible energy..." class="text-textarea"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="messageText2">Message Line 2</label>
+                        <textarea id="messageText2" placeholder="Your kindness, humor, and zest for life..." class="text-textarea"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="messageText3">Message Line 3</label>
+                        <textarea id="messageText3" placeholder="May this new year bring you endless joy..." class="text-textarea"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="messageHighlight">Final Message (Highlighted)</label>
+                        <textarea id="messageHighlight" placeholder="Here's to you, [Name]! May your special day be as amazing as you are! 🎉❤️" class="text-textarea"></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button id="saveMessages" class="btn-primary">
+                        <i class="fas fa-save"></i> Save All Changes
+                    </button>
+                    <button id="previewMessages" class="btn-secondary">
+                        <i class="fas fa-eye"></i> Preview Changes
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Colors Customization Tab -->
+        <div class="tab-content" id="colors-tab">
+            <div class="colors-editor">
+                <h2>Customize Colors & Theme</h2>
+                
+                <!-- Primary Theme Colors -->
+                <div class="color-section">
+                    <h3><i class="fas fa-palette"></i> Primary Theme</h3>
+                    <div class="color-grid">
+                        <div class="color-group">
+                            <label for="primaryColor">Primary Color</label>
+                            <input type="color" id="primaryColor" class="color-picker" value="#6366f1">
+                            <span class="color-preview" data-color="primaryColor"></span>
+                        </div>
+                        <div class="color-group">
+                            <label for="secondaryColor">Secondary Color</label>
+                            <input type="color" id="secondaryColor" class="color-picker" value="#8b5cf6">
+                            <span class="color-preview" data-color="secondaryColor"></span>
+                        </div>
+                        <div class="color-group">
+                            <label for="accentColor">Accent Color</label>
+                            <input type="color" id="accentColor" class="color-picker" value="#f59e0b">
+                            <span class="color-preview" data-color="accentColor"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Text Colors -->
+                <div class="color-section">
+                    <h3><i class="fas fa-font"></i> Text Colors</h3>
+                    <div class="color-grid">
+                        <div class="color-group">
+                            <label for="heroTextColor">Hero Title Color</label>
+                            <input type="color" id="heroTextColor" class="color-picker" value="#6366f1">
+                        </div>
+                        <div class="color-group">
+                            <label for="sectionTitleColor">Section Titles Color</label>
+                            <input type="color" id="sectionTitleColor" class="color-picker" value="#6366f1">
+                        </div>
+                        <div class="color-group">
+                            <label for="messageTextColor">Birthday Message Color</label>
+                            <input type="color" id="messageTextColor" class="color-picker" value="#f59e0b">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Timeline Colors -->
+                <div class="color-section">
+                    <h3><i class="fas fa-timeline"></i> Timeline Colors</h3>
+                    <div class="color-grid">
+                        <div class="color-group">
+                            <label for="timelineDotColor">Timeline Dots</label>
+                            <input type="color" id="timelineDotColor" class="color-picker" value="#6366f1">
+                        </div>
+                        <div class="color-group">
+                            <label for="timelineLineColor">Timeline Line</label>
+                            <input type="color" id="timelineLineColor" class="color-picker" value="#6366f1">
+                        </div>
+                        <div class="color-group">
+                            <label for="timelineTextColor">Timeline Text</label>
+                            <input type="color" id="timelineTextColor" class="color-picker" value="#f8fafc">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Presets -->
+                <div class="color-section">
+                    <h3><i class="fas fa-swatchbook"></i> Color Presets</h3>
+                    <div class="preset-grid">
+                        <button class="preset-btn" data-preset="default">
+                            <div class="preset-colors">
+                                <span style="background: #6366f1;"></span>
+                                <span style="background: #8b5cf6;"></span>
+                                <span style="background: #f59e0b;"></span>
+                            </div>
+                            <span>Default</span>
+                        </button>
+                        <button class="preset-btn" data-preset="romantic">
+                            <div class="preset-colors">
+                                <span style="background: #ec4899;"></span>
+                                <span style="background: #f472b6;"></span>
+                                <span style="background: #fb7185;"></span>
+                            </div>
+                            <span>Romantic</span>
+                        </button>
+                        <button class="preset-btn" data-preset="elegant">
+                            <div class="preset-colors">
+                                <span style="background: #1f2937;"></span>
+                                <span style="background: #374151;"></span>
+                                <span style="background: #d4af37;"></span>
+                            </div>
+                            <span>Elegant</span>
+                        </button>
+                        <button class="preset-btn" data-preset="vibrant">
+                            <div class="preset-colors">
+                                <span style="background: #ef4444;"></span>
+                                <span style="background: #f97316;"></span>
+                                <span style="background: #eab308;"></span>
+                            </div>
+                            <span>Vibrant</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button id="saveColors" class="btn-primary">
+                        <i class="fas fa-save"></i> Apply Colors
+                    </button>
+                    <button id="resetColors" class="btn-secondary">
+                        <i class="fas fa-undo"></i> Reset to Default
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Processing...</p>
+        </div>
+    </div>
+    
+    <!-- Notification Container -->
+    <div id="notificationContainer" class="notification-container"></div>
+    
+    <script src="js/admin.js"></script>
+</body>
+</html>

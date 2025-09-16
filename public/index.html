@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Bryan 🎉</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">Happy Birthday Bryan 🎉</div>
+            <ul class="nav-menu">
+                <li><a href="#hero" class="nav-link">Home</a></li>
+                <li><a href="#gallery" class="nav-link">Memories</a></li>
+                <li><a href="#timeline" class="nav-link">Journey</a></li>
+                <li><a href="#message" class="nav-link">Message</a></li>
+            </ul>
+            <button class="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Happy Birthday Bruce!</h1>
+            <p class="hero-subtitle">Celebrating another amazing year of your incredible journey</p>
+            
+            <div class="hero-video-container">
+                <video id="birthdayVideo" class="hero-video" preload="metadata" style="display: none;">
+                    <source src="#" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                
+                <div class="video-placeholder">
+                    <div>
+                        <i class="fas fa-video" style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i>
+                        Birthday Video Placeholder<br>
+                        <small style="opacity: 0.7;">Upload your special message video</small>
+                    </div>
+                </div>
+                
+                <div class="play-overlay" id="playOverlay" style="display: none;">
+                    <div class="play-button">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="section gallery-section">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <h2 class="section-title">Our Beautiful Memories</h2>
+                <p class="section-subtitle">A collection of moments that make life special</p>
+            </div>
+            
+            <div class="carousel-container reveal">
+                <div class="carousel-3d" id="carousel3d">
+                    <!-- Photos will be loaded dynamically as carousel items -->
+                </div>
+                
+                <div class="carousel-controls">
+                    <button class="carousel-btn carousel-prev" id="carouselPrev">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="carousel-btn carousel-next" id="carouselNext">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+                
+                <div class="carousel-progress">
+                    <div class="carousel-progress-bar" id="carouselProgressBar"></div>
+                </div>
+                
+                <div class="carousel-counter">
+                    <span id="carouselCounter">0 / 0</span>
+                </div>
+            </div>
+            
+            <!-- Fallback grid for when no photos are uploaded -->
+            <div class="gallery-grid" id="galleryGrid" style="display: none;">
+                <!-- Placeholder photos will be shown here when no uploads exist -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section id="timeline" class="section timeline-section">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <h2 class="section-title">Our Journey Together</h2>
+                <p class="section-subtitle">Milestones and memories that shaped our story</p>
+            </div>
+            
+            <div class="timeline">
+                <!-- Timeline events will be loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Message Section -->
+    <section id="message" class="section message-section">
+        <canvas id="fireworks" class="fireworks-canvas"></canvas>
+        <div class="section-container">
+            <div class="message-content reveal">
+                <h2 class="message-title">Happy Birthday, Brucey! 🎂</h2>
+<!--                <p class="message-text">You light up every room with your incredible energy and infectious smile.</p>-->
+<!--                <p class="message-text">Your kindness, humor, and zest for life inspire everyone around you.</p>-->
+<!--                <p class="message-text">May this new year bring you endless joy, exciting adventures, and all the success you deserve.</p>-->
+<!--                <p class="message-highlight">Here's to you, Bryan! May your special day be as amazing as you are! 🎉❤️</p>-->
+                <p class="message-text">I’m grateful to you and I’m grateful to God for you. I’m grateful to have a friend that appreciates me as much as you do.</p>
+                <p class="message-text">I’m grateful to have a friend that wakes up by 4am to see me off on my flight. I’m grateful to have a friend that won’t let a day pass without speaking to me.</p>
+                <p class="message-text">I’m grateful to have a friend that pours into me as much as you do. I’m grateful to have a friend that isn’t scared to show the world how much he loves me.</p>
+                <p class="message-text">I’m grateful to have a friend that doesn’t hesitate to recognize my beauty. I’m grateful to experience the love of <strong>Bryan Nii-Ayitey Benjamin-Addy</strong>.</p>
+                <p class="message-highlight">I’m grateful to have you. Happy birthday my Brucey.</p>
+                <p class="message-highlight">I love you and I love you more.</p>
+                <button class="celebrate-button" onclick="launchCelebration()">
+                    <i class="fas fa-star" style="margin-right: 0.5rem;"></i>
+                    Celebrate!
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    <script src="js/colors.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

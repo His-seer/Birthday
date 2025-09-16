@@ -1,0 +1,15 @@
+name: Keep Render Alive
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"  # Runs every 10 minutes
+  workflow_dispatch:         # Allow manual trigger from GitHub UI
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Curl Render App
+        run: |
+          curl -s -o /dev/null -w "%{http_code}" https://bryan-birthday-1.onrender.com
+    continue-on-error: true   # Prevents fail notifications
