@@ -12,4 +12,5 @@ jobs:
       - name: Curl Render App
         run: |
           curl -s -o /dev/null -w "%{http_code}" https://bryan-birthday-1.onrender.com
+          curl -s -o /dev/null -w "%{http_code}" https://bryan-birthday-1.onrender.com/keep-alive
     continue-on-error: true   # Prevents fail notifications

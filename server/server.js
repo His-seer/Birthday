@@ -20,6 +20,12 @@ uploadDirs.forEach(dir => {
     }
 });
 
+// Keep-alive endpoint
+app.get('/keep-alive', (req, res) => {
+  console.log("Ping received at:", new Date());
+  res.send("Still alive!");
+});
+
 // Routes
 app.use('/api', require('./routes/api'));
 app.use('/upload', require('./routes/upload'));
