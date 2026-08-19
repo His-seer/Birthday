@@ -1,8 +1,32 @@
 {
   "year": 2026,
   "label": "2026",
-  "_note": "CUMULATIVE, append-only. ARRAY ORDER IS THE RENDERED ORDER — dates are display-only, because several stills are screenshots whose EXIF is the screenshot date, not the moment. Titles are the client's Drive labels verbatim.",
+  "_note": "ORDER IS THE CLIENT LINEUP of 2026-08-19, not capture order and not append order. ARRAY ORDER IS THE RENDERED ORDER — dates are display-only, because several stills are screenshots whose EXIF is the screenshot date, not the moment. Titles are the client’s Drive labels verbatim, except the two naps: both were \"Nap time\" and differed only by emoji, so they take the client’s own \"my\"/\"his\" distinction from the lineup.",
   "events": [
+    {
+      "id": "first-wedding-together",
+      "date": null,
+      "title": "First wedding together👀",
+      "story": "TODO-CONTENT",
+      "media": {
+        "kind": "image",
+        "src": "timeline/2026/first-wedding-together",
+        "alt": "TODO-CONTENT",
+        "aspect": "1280:959"
+      }
+    },
+    {
+      "id": "family-bonding-timeee",
+      "date": null,
+      "title": "Family bonding timeee",
+      "story": "TODO-CONTENT",
+      "media": {
+        "kind": "image",
+        "src": "timeline/2026/family-bonding-timeee",
+        "alt": "TODO-CONTENT",
+        "aspect": "83:180"
+      }
+    },
     {
       "id": "pivotal",
       "date": null,
@@ -26,6 +50,18 @@
         "alt": "TODO-CONTENT",
         "aspect": "9:16",
         "poster": "timeline/2026/first-hello-of-2026-poster"
+      }
+    },
+    {
+      "id": "nap-time-2",
+      "date": null,
+      "title": "My nap time🥺",
+      "story": "TODO-CONTENT",
+      "media": {
+        "kind": "image",
+        "src": "timeline/2026/nap-time-2",
+        "alt": "TODO-CONTENT",
+        "aspect": "1013:1800"
       }
     },
     {
@@ -67,19 +103,6 @@
       }
     },
     {
-      "id": "chef-chronicles",
-      "date": null,
-      "title": "Chef chronicles🧑‍🍳👩‍🍳",
-      "story": "TODO-CONTENT",
-      "media": {
-        "kind": "video",
-        "src": "timeline/2026/chef-chronicles",
-        "alt": "TODO-CONTENT",
-        "aspect": "9:16",
-        "poster": "timeline/2026/chef-chronicles-poster"
-      }
-    },
-    {
       "id": "family-bonding-timeee-2",
       "date": null,
       "title": "Family bonding timeee",
@@ -92,39 +115,15 @@
       }
     },
     {
-      "id": "family-bonding-timeee",
-      "date": null,
-      "title": "Family bonding timeee",
+      "id": "island-babiessss",
+      "date": "2026-01-24",
+      "title": "Island babiessss",
       "story": "TODO-CONTENT",
       "media": {
         "kind": "image",
-        "src": "timeline/2026/family-bonding-timeee",
+        "src": "timeline/2026/island-babiessss",
         "alt": "TODO-CONTENT",
-        "aspect": "83:180"
-      }
-    },
-    {
-      "id": "nap-time",
-      "date": null,
-      "title": "Nap time🥹",
-      "story": "TODO-CONTENT",
-      "media": {
-        "kind": "image",
-        "src": "timeline/2026/nap-time",
-        "alt": "TODO-CONTENT",
-        "aspect": "1013:1800"
-      }
-    },
-    {
-      "id": "nap-time-2",
-      "date": null,
-      "title": "Nap time🥺",
-      "story": "TODO-CONTENT",
-      "media": {
-        "kind": "image",
-        "src": "timeline/2026/nap-time-2",
-        "alt": "TODO-CONTENT",
-        "aspect": "1013:1800"
+        "aspect": "589:771"
       }
     },
     {
@@ -166,18 +165,6 @@
       }
     },
     {
-      "id": "island-babiessss",
-      "date": "2026-01-24",
-      "title": "Island babiessss",
-      "story": "TODO-CONTENT",
-      "media": {
-        "kind": "image",
-        "src": "timeline/2026/island-babiessss",
-        "alt": "TODO-CONTENT",
-        "aspect": "589:771"
-      }
-    },
-    {
       "id": "first-date-night",
       "date": "2026-01-26",
       "title": "First date night❤️",
@@ -203,6 +190,31 @@
       }
     },
     {
+      "id": "surprise-second-meet-of-2026",
+      "date": "2026-05-03",
+      "title": "SURPRISE! Second meet of 2026",
+      "story": "TODO-CONTENT",
+      "media": {
+        "kind": "video",
+        "src": "timeline/2026/surprise-second-meet-of-2026",
+        "alt": "TODO-CONTENT",
+        "aspect": "9:16",
+        "poster": "timeline/2026/surprise-second-meet-of-2026-poster"
+      }
+    },
+    {
+      "id": "nap-time",
+      "date": null,
+      "title": "His nap time🥹",
+      "story": "TODO-CONTENT",
+      "media": {
+        "kind": "image",
+        "src": "timeline/2026/nap-time",
+        "alt": "TODO-CONTENT",
+        "aspect": "1013:1800"
+      }
+    },
+    {
       "id": "second-conference-together",
       "date": "2026-05-05",
       "title": "Second conference together🫶",
@@ -215,18 +227,6 @@
       }
     },
     {
-      "id": "first-wedding-together",
-      "date": null,
-      "title": "First wedding together👀",
-      "story": "TODO-CONTENT",
-      "media": {
-        "kind": "image",
-        "src": "timeline/2026/first-wedding-together",
-        "alt": "TODO-CONTENT",
-        "aspect": "1280:959"
-      }
-    },
-    {
       "id": "second-wedding-together",
       "date": "2026-05-09",
       "title": "Second wedding together 💋",
@@ -236,6 +236,31 @@
         "src": "timeline/2026/second-wedding-together",
         "alt": "TODO-CONTENT",
         "aspect": "3:4"
+      }
+    },
+    {
+      "id": "chef-chronicles",
+      "date": null,
+      "title": "Chef chronicles🧑‍🍳👩‍🍳",
+      "story": "TODO-CONTENT",
+      "media": {
+        "kind": "video",
+        "src": "timeline/2026/chef-chronicles",
+        "alt": "TODO-CONTENT",
+        "aspect": "9:16",
+        "poster": "timeline/2026/chef-chronicles-poster"
+      }
+    },
+    {
+      "id": "third-meet-of-2026",
+      "date": null,
+      "title": "Third meet of 2026!",
+      "story": "TODO-CONTENT",
+      "media": {
+        "kind": "image",
+        "src": "timeline/2026/third-meet-of-2026",
+        "alt": "TODO-CONTENT",
+        "aspect": "3:2"
       }
     },
     {

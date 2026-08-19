@@ -170,7 +170,7 @@
   },
   "videos/2026/chef-chronicles": {
     "mp4": "videos/2026/chef-chronicles.3958ab5c.mp4",
-    "webm": null,
+    "webm": "videos/2026/chef-chronicles.3958ab5c.webm",
     "poster": "timeline/2026/chef-chronicles-poster",
     "width": 720,
     "height": 1280,
@@ -178,12 +178,12 @@
     "hasAudio": true,
     "bytes": {
       "mp4": 12484874,
-      "webm": 0
+      "webm": 8371870
     }
   },
   "videos/2026/first-hello-of-2026": {
     "mp4": "videos/2026/first-hello-of-2026.a82b6239.mp4",
-    "webm": null,
+    "webm": "videos/2026/first-hello-of-2026.a82b6239.webm",
     "poster": "timeline/2026/first-hello-of-2026-poster",
     "width": 540,
     "height": 960,
@@ -191,12 +191,12 @@
     "hasAudio": true,
     "bytes": {
       "mp4": 2533366,
-      "webm": 0
+      "webm": 1943767
     }
   },
   "videos/2026/hate-these-goodbyes": {
     "mp4": "videos/2026/hate-these-goodbyes.4b97ce62.mp4",
-    "webm": null,
+    "webm": "videos/2026/hate-these-goodbyes.4b97ce62.webm",
     "poster": "timeline/2026/hate-these-goodbyes-poster",
     "width": 480,
     "height": 854,
@@ -204,7 +204,7 @@
     "hasAudio": true,
     "bytes": {
       "mp4": 632330,
-      "webm": 0
+      "webm": 378695
     }
   },
   "videos/2026/moments-before-you-popped-the-question": {
@@ -222,7 +222,7 @@
   },
   "videos/2026/shy-trumpetist": {
     "mp4": "videos/2026/shy-trumpetist.1c6886b8.mp4",
-    "webm": null,
+    "webm": "videos/2026/shy-trumpetist.1c6886b8.webm",
     "poster": "timeline/2026/shy-trumpetist-poster",
     "width": 1080,
     "height": 1440,
@@ -230,6 +230,19 @@
     "hasAudio": true,
     "bytes": {
       "mp4": 1873282,
+      "webm": 1385470
+    }
+  },
+  "videos/2026/surprise-second-meet-of-2026": {
+    "mp4": "videos/2026/surprise-second-meet-of-2026.731a1327.mp4",
+    "webm": null,
+    "poster": "timeline/2026/surprise-second-meet-of-2026-poster",
+    "width": 720,
+    "height": 1280,
+    "duration": 34.16,
+    "hasAudio": true,
+    "bytes": {
+      "mp4": 9193120,
       "webm": 0
     }
   },
