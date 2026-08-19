@@ -13,6 +13,16 @@ interface Props {
 }
 
 const { name, year, farewell } = Astro.props;
+
+/* The mark named the recipient back when the flourish was the whole ending and
+ * nothing else on the page said who it was for. With a write-up above it, the
+ * prose opens on his name and closes on "Happy birthday my Brucey" — so
+ * repeating it under the rule says the same thing twice within ~500px, in a
+ * flatter voice than the prose it is competing with.
+ *
+ * Conditional rather than deleted: a year with no farewell still ends on the
+ * rule alone, and there the nameplate is the only thing naming him. */
+const showName = !farewell?.salutation;
 ---
 
 {/*
@@ -47,8 +57,8 @@ const { name, year, farewell } = Astro.props;
       )
     }
     <div class="closing__rule" aria-hidden="true"><span></span></div>
-    <p class="closing__mark">
-      <span class="closing__name">{name}</span>
+    <p class:list={['closing__mark', !showName && 'closing__mark--year-only']}>
+      {showName && <span class="closing__name">{name}</span>}
       <span class="u-micro">{year}</span>
     </p>
   </div>
@@ -130,6 +140,13 @@ const { name, year, farewell } = Astro.props;
     justify-content: space-between;
     gap: var(--space-4);
     margin-top: var(--space-6);
+  }
+
+  /* space-between with a single child would swing the year to the left edge.
+     It stays where it has always sat, so removing the name reads as the name
+     leaving rather than as the whole line moving. */
+  .closing__mark--year-only {
+    justify-content: flex-end;
   }
 
   .closing__name {
