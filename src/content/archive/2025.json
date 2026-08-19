@@ -1,0 +1,110 @@
+{
+  "year": 2025,
+  "note": "The 2025 edition, rendered at /2025/ in last year's visual language. Deliberately NOT a content collection — this file is imported explicitly by src/pages/2025.astro, so no 2026 page can reach it by querying.",
+  "name": "Bruce",
+  "hero": {
+    "greeting": "Happy Birthday",
+    "subtitle": "Celebrating another amazing year of your incredible journey"
+  },
+  "messageTitle": "Happy Birthday, Brucey! 🎂",
+  "sections": {
+    "gallery": {
+      "title": "Our Beautiful Memories",
+      "subtitle": "A collection of moments that make life special"
+    },
+    "timeline": {
+      "title": "Our Journey Together",
+      "subtitle": "Milestones and memories that shaped our story"
+    }
+  },
+  "paragraphs": [
+    "I’m grateful to you and I’m grateful to God for you. I’m grateful to have a friend that appreciates me as much as you do.",
+    "I’m grateful to have a friend that wakes up by 4am to see me off on my flight. I’m grateful to have a friend that won’t let a day pass without speaking to me.",
+    "I’m grateful to have a friend that pours into me as much as you do. I’m grateful to have a friend that isn’t scared to show the world how much he loves me.",
+    "I’m grateful to have a friend that doesn’t hesitate to recognize my beauty. I’m grateful to experience the love of Bryan Nii-Ayitey Benjamin-Addy."
+  ],
+  "closing": [
+    "I’m grateful to have you. Happy birthday my Brucey.",
+    "I love you and I love you more."
+  ],
+  "gallery": [
+    {
+      "src": "photos/2025/1757719432848-554445544",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "3:4"
+    },
+    {
+      "src": "photos/2025/1757719432908-981652835",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "1013:1800"
+    },
+    {
+      "src": "photos/2025/1757719432929-76653408",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "1013:1800"
+    },
+    {
+      "src": "photos/2025/1757719432945-291527585",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "104:225"
+    },
+    {
+      "src": "photos/2025/1757719432997-98018199",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "83:180"
+    },
+    {
+      "src": "photos/2025/1757719433050-42809766",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "83:180"
+    },
+    {
+      "src": "photos/2025/1757719433091-12137898",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "83:180"
+    },
+    {
+      "src": "photos/2025/1757719433129-517609304",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "104:225"
+    },
+    {
+      "src": "photos/2025/1757719433131-751041088",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "104:225"
+    },
+    {
+      "src": "photos/2025/1757719634700-96114700",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "3:4"
+    },
+    {
+      "src": "photos/2025/1757719706745-987891521",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "3:4"
+    },
+    {
+      "src": "photos/2025/1757719756010-251152830",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "293:390"
+    },
+    {
+      "src": "photos/2025/1757719779238-866617274",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "3:4"
+    }
+  ]
+}

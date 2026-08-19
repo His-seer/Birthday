@@ -1,0 +1,112 @@
+---
+import { EDITIONS } from '../lib/editions';
+
+interface Props {
+  current: 2025 | 2026;
+  /** Style for the light "keepsake" page vs the dark 2025 page. */
+  theme?: 'paper' | 'slate';
+}
+
+const { current, theme = 'paper' } = Astro.props;
+
+const editions = EDITIONS;
+---
+
+{/*
+  The site is a multi-year record, so it should be possible to go and look at
+  last year. Each edition is preserved in its own visual language — /2025/ is
+  not the 2026 design with old content in it, it is last year's design.
+*/}
+<nav class:list={['yswitch', `yswitch--${theme}`]} aria-label="Editions">
+  <ul role="list">
+    {
+      editions.map((e) => (
+        <li>
+          <a
+            href={e.href}
+            aria-current={e.year === current ? 'page' : undefined}
+            class:list={['yswitch__link', e.year === current && 'is-current']}
+          >
+            <span class="yswitch__year">{e.year}</span>
+            <span class="yswitch__label">{e.label}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  .yswitch ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .yswitch__link {
+    display: grid;
+    gap: 0.15rem;
+    /* >= 44x44 tap target. */
+    min-height: 44px;
+    align-content: center;
+    padding: 0.35rem 0.9rem;
+    border: 1px solid;
+    border-radius: 4px;
+    text-decoration: none;
+    transition:
+      color 150ms ease,
+      border-color 150ms ease,
+      background 150ms ease;
+  }
+
+  .yswitch__year {
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .yswitch__label {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.75;
+  }
+
+  /* ------------------------------------------------- 2026 (paper) theme */
+  .yswitch--paper .yswitch__link {
+    border-color: var(--hairline);
+    color: var(--ink-muted);
+  }
+
+  .yswitch--paper .yswitch__link:hover {
+    color: var(--burgundy);
+    border-color: var(--burgundy);
+  }
+
+  .yswitch--paper .yswitch__link.is-current {
+    background: var(--burgundy);
+    border-color: var(--burgundy);
+    color: var(--paper);
+  }
+
+  /* ------------------------------------------------- 2025 (slate) theme */
+  .yswitch--slate .yswitch__link {
+    border-color: var(--p-border);
+    color: var(--p-text);
+  }
+
+  .yswitch--slate .yswitch__link:hover {
+    color: var(--p-white);
+    border-color: var(--p-primary);
+  }
+
+  .yswitch--slate .yswitch__link.is-current {
+    background: var(--p-primary);
+    border-color: var(--p-primary);
+    color: var(--p-white);
+  }
+</style>

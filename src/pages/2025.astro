@@ -1,0 +1,272 @@
+---
+/**
+ * THE 2025 EDITION.
+ *
+ * Last year's design, preserved so the site is a record of itself rather than
+ * only its latest state. Rendered from the same migrated content the 2026 page
+ * uses, in 2025's visual language.
+ *
+ * The 2025 letter is imported EXPLICITLY here rather than through a content
+ * collection. That is deliberate: no 2026 page can surface it by querying, so
+ * a stale line from last year cannot leak into this year's gift.
+ */
+import Layout from '../layouts/Layout.astro';
+import YearSwitch from '../components/YearSwitch.astro';
+import Legacy2025Carousel from '../components/Legacy2025Carousel.astro';
+import Legacy2025Timeline from '../components/Legacy2025Timeline.astro';
+import VideoCard from '../components/VideoCard.astro';
+import '../styles/tokens-2025.css';
+import archive from '../content/archive/2025.json';
+import { getTimeline } from '../lib/content';
+import { getVideo } from '../lib/media';
+
+const YEAR = 2025;
+
+const timeline = await getTimeline();
+const events = timeline.find((y) => y.year === YEAR)?.events ?? [];
+
+/* The archive owns its own photographs.
+   This previously read `(await getYear(2026)).gallery` on the reasoning that
+   the thirteen photographs were shared history. That held only while the 2026
+   scaffold still pointed at photos/2025/* — the moment 2026 got its own
+   pictures, this page silently started showing THIS year's gallery under last
+   year's heading. The archive is a record of 2025 and must not depend on what
+   any later year happens to contain. */
+const photos = archive.gallery;
+
+// The name is consistent here. In 2025 the <title> and logo said "Bryan", the
+// hero said "Bruce" and the message said "Brucey" — AUDIT H1 traced that to the
+// admin panel silently dropping `messages`, so someone hand-edited the HTML and
+// only got half of it. It was a bug, not a design choice, so it is not preserved.
+const hero = `${archive.hero.greeting} ${archive.name}`;
+
+const heroVideo = getVideo('timeline/2025/hero-video');
+
+const links = [
+  { href: '#memories', label: 'Memories' },
+  { href: '#journey', label: 'Journey' },
+  { href: '#message', label: 'Message' },
+];
+---
+
+<Layout
+  title={`${hero} · 2025`}
+  description="The 2025 edition."
+  fallbackTitle={`${hero} · 2025`}
+  bodyClass="y2025"
+>
+  <header slot="header" class="n25">
+    <div class="wrap n25__inner">
+      <a class="n25__logo" href="#top">{hero} 🎉</a>
+      <nav class="n25__links" aria-label="Sections">
+        <ul role="list">
+          {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  {/* The switcher alone carries this. Its "2025 / The first one" and
+      "2026 / This year" labels already say which edition you are on and that
+      another exists, so the paragraph that used to sit here was restating the
+      buttons directly beneath it. */}
+  <div class="wrap banner">
+    <YearSwitch current={2025} theme="slate" />
+  </div>
+
+  <section class="s25 hero25" id="top" aria-labelledby="hero25-h">
+    <div class="wrap">
+      <h1 class="hero25__h" id="hero25-h">{hero}!</h1>
+      <p class="hero25__sub">{archive.hero.subtitle}</p>
+      {
+        heroVideo && (
+          <div class="hero25__video">
+            <VideoCard
+              src="timeline/2025/hero-video"
+              alt="Birthday video message"
+              aspect={`${heroVideo.width}:${heroVideo.height}`}
+              title="Birthday video message"
+              sizes="(max-width: 48rem) 92vw, 40rem"
+            />
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <section class="s25 s25--sunk" id="memories" aria-labelledby="mem25-h">
+    <div class="wrap">
+      <h2 class="s25__h" id="mem25-h">{archive.sections.gallery.title}</h2>
+      <p class="s25__sub">{archive.sections.gallery.subtitle}</p>
+      <Legacy2025Carousel items={photos} />
+    </div>
+  </section>
+
+  <section class="s25" id="journey" aria-labelledby="jou25-h">
+    <div class="wrap">
+      <h2 class="s25__h" id="jou25-h">{archive.sections.timeline.title}</h2>
+      <p class="s25__sub">{archive.sections.timeline.subtitle}</p>
+      <Legacy2025Timeline events={events} />
+    </div>
+  </section>
+
+  <section class="s25 s25--sunk" id="message" aria-labelledby="msg25-h">
+    <div class="wrap m25">
+      <h2 class="m25__h" id="msg25-h">{archive.messageTitle}</h2>
+      {archive.paragraphs.map((p: string) => <p class="m25__p">{p}</p>)}
+      {archive.closing.map((p: string) => <p class="m25__hl">{p}</p>)}
+    </div>
+  </section>
+
+  <footer slot="footer" class="f25">
+    <div class="wrap">
+      <YearSwitch current={2025} theme="slate" />
+    </div>
+  </footer>
+</Layout>
+
+<style>
+  .wrap {
+    width: 100%;
+    max-width: 75rem;
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 0.5rem + 3vw, 2rem);
+  }
+
+  /* ------------------------------------------------------------------ nav */
+  .n25 {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgb(15 23 42 / 0.9);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--p-border);
+  }
+
+  .n25__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 3.5rem;
+    flex-wrap: wrap;
+  }
+
+  .n25__logo {
+    font-family: var(--font-2025-display);
+    font-weight: 700;
+    font-size: var(--t-2025-logo);
+    color: var(--p-white);
+    text-decoration: none;
+  }
+
+  .n25__links ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .n25__links a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--p-text);
+    text-decoration: none;
+    font-size: var(--t-2025-body);
+  }
+
+  .n25__links a:hover {
+    color: var(--p-white);
+  }
+
+  /* --------------------------------------------------------------- banner */
+  .banner {
+    display: grid;
+    gap: 0.75rem;
+    padding-block: 1.5rem;
+  }
+
+  /* -------------------------------------------------------------- sections */
+  .s25 {
+    padding-block: 5rem;
+  }
+
+  .s25--sunk {
+    background: var(--p-surface);
+  }
+
+  .s25__h {
+    margin: 0 0 0.75rem;
+    font-size: var(--t-2025-section);
+    line-height: var(--lh-2025-display);
+    text-align: center;
+  }
+
+  .s25__sub {
+    margin: 0 auto 3rem;
+    max-width: 40rem;
+    text-align: center;
+    color: var(--p-text);
+    font-size: var(--t-2025-sub);
+  }
+
+  /* ------------------------------------------------------------------ hero */
+  .hero25 {
+    text-align: center;
+    padding-block: 6rem 5rem;
+  }
+
+  .hero25__h {
+    margin: 0;
+    font-size: var(--t-2025-hero);
+    /* 1.6 leading on a 64px display face. This is the 2025 look, kept. */
+    line-height: var(--lh-2025-display);
+  }
+
+  .hero25__sub {
+    margin: 1rem auto 0;
+    max-width: 40rem;
+    color: var(--p-text);
+    font-size: var(--t-2025-lead);
+  }
+
+  .hero25__video {
+    max-width: 40rem;
+    margin: 3rem auto 0;
+  }
+
+  /* --------------------------------------------------------------- message */
+  .m25 {
+    max-width: 46rem;
+    text-align: center;
+  }
+
+  .m25__h {
+    margin: 0 0 2rem;
+    font-size: var(--t-2025-message);
+    line-height: var(--lh-2025-display);
+    color: var(--p-accent);
+  }
+
+  .m25__p {
+    margin: 0 0 1.25rem;
+    color: var(--p-text);
+    font-size: var(--t-2025-lead);
+    line-height: var(--lh-2025-message);
+  }
+
+  .m25__hl {
+    margin: 1.5rem 0 0;
+    color: var(--p-accent);
+    font-size: var(--t-2025-card);
+    font-weight: 600;
+  }
+
+  /* ---------------------------------------------------------------- footer */
+  .f25 {
+    padding-block: 3rem;
+    border-top: 1px solid var(--p-border);
+  }
+</style>

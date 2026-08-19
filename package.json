@@ -1,25 +1,46 @@
 {
   "name": "birthday-website",
-  "version": "1.0.0",
-  "description": "Professional birthday celebration website with 3D photo carousel and admin panel",
-  "main": "server/server.js",
+  "version": "2026.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A birthday keepsake site. Static, cumulative across years, deployed to Cloudflare Pages.",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
-    "start": "node server/server.js",
-    "dev": "nodemon server/server.js",
-    "test": "echo 'Tests coming soon'"
+    "dev": "astro dev",
+    "build": "astro build && node scripts/copy-media.mjs && node scripts/verify.mjs",
+    "preview": "astro preview",
+    "verify": "node scripts/verify.mjs",
+    "intake": "node scripts/intake.mjs",
+    "media": "npm run media:images && npm run media:video && npm run media:og",
+    "media:images": "node scripts/images.mjs",
+    "media:video": "node scripts/video.mjs",
+    "media:og": "node scripts/og.mjs",
+    "migrate:2025": "node scripts/migrate-2025.mjs",
+    "test": "node --test \"tests/**/*.test.mjs\"",
+    "format": "prettier --write .",
+    "deploy": "npm run build && wrangler pages deploy dist"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "multer": "^1.4.5-lts.1",
-    "sharp": "^0.32.6",
-    "sqlite3": "^5.1.6",
-    "dotenv": "^16.3.1",
-    "cors": "^2.8.5"
+    "@fontsource-variable/fraunces": "^5.3.0",
+    "@fontsource-variable/newsreader": "^5.3.0",
+    "@fontsource-variable/playfair-display": "^5.3.0",
+    "@fontsource/inter": "^5.3.0",
+    "astro": "^7.2.0",
+    "sharp": "^0.35.3"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "ffmpeg-static": "^5.3.0",
+    "ffprobe-static": "^3.1.0",
+    "prettier": "^3.6.2",
+    "prettier-plugin-astro": "^0.14.1",
+    "wrangler": "^4.42.0"
   },
-  "keywords": ["birthday", "website", "photo-carousel", "admin-panel"],
-  "author": "",
-  "license": "ISC"
+  "keywords": [
+    "birthday",
+    "static-site",
+    "astro"
+  ],
+  "license": "UNLICENSED"
 }

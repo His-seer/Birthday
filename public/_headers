@@ -1,0 +1,43 @@
+# Cloudflare Pages headers.
+#
+# The CDN replaces every piece of server-side work the Express app used to do.
+# Nothing here was ported from it — compression middleware, cache headers and
+# security headers all come from the edge now.
+#
+# Limits (verified 2026-08-10): 100 header rules, 2000 chars per header.
+# https://developers.cloudflare.com/pages/platform/limits/
+
+/*
+  # AUDIT: last year exposed `X-Powered-By: Express` and had no helmet at all.
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  Cross-Origin-Opener-Policy: same-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=(), interest-cohort=()
+  # The site is for one person and is never publicly shared or indexed.
+  X-Robots-Tag: noindex, nofollow, noarchive, noimageindex
+  # Everything is first-party: fonts are self-hosted, icons are inline SVG, and
+  # there is no analytics, no CDN script and no Google Fonts. So the policy can
+  # be this tight without breaking anything.
+  Content-Security-Policy: default-src 'self'; img-src 'self' data:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'; object-src 'none'
+
+# Content-hashed build assets. Safe to cache forever precisely because the
+# filename changes when the bytes change.
+/_assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Video filenames also carry a content hash (scripts/video.mjs), so the same
+# rule applies. Last year served `Cache-Control: max-age=0` on 117 MiB of
+# immutable media, revalidating all of it on every visit (AUDIT H5).
+/media/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# HTML is the only thing that changes at the same URL, so it revalidates.
+/
+  Cache-Control: public, max-age=0, must-revalidate
+
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate

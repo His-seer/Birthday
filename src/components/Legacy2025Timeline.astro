@@ -1,0 +1,196 @@
+---
+import { Picture } from 'astro:assets';
+import VideoCard from './VideoCard.astro';
+import { isTodo } from '../lib/content';
+
+interface Props {
+  events: any[];
+}
+
+const { events } = Astro.props;
+
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/timeline/**/*.jpg', {
+  eager: true,
+});
+---
+
+{/*
+  The 2025 timeline: the alternating spine-and-dots rail, preserved.
+
+  KEPT: the centre spine, the indigo dots, left/right alternation, the 15px
+  cards with the single large shadow. This is the layout DESIGN.md measured at
+  8,694px and ~50% waste per row — reproduced because it is what last year
+  looked like.
+
+  FIXED: every video is poster-first with preload="none" (2025 shipped ten bare
+  `<video controls>` elements with no poster, so the section read as a column of
+  black rectangles wearing browser chrome, and the browser range-requested all
+  of them on load). Images keep their real aspect instead of being cropped.
+  The rail stacks properly below 48rem instead of relying on one 768px rule.
+
+  NOT ADDED: story text. All 14 entries genuinely had `content: ""` in 2025 —
+  they were title-only. Showing placeholders here would misrepresent the year.
+*/}
+<div class="t25">
+  <ol class="t25__list" role="list">
+    {
+      events.map((event, i) => {
+        const image =
+          event.media.kind === 'image'
+            ? images[`/src/assets/${event.media.src}.jpg`]?.default
+            : undefined;
+        const [aw, ah] =
+          event.media.kind === 'none' ? [4, 3] : event.media.aspect.split(':').map(Number);
+
+        return (
+          <li class:list={['t25__row', i % 2 === 1 && 't25__row--right']}>
+            <span class="t25__dot" aria-hidden="true" />
+            <article class="t25__card">
+              <h3 class="t25__title">{event.title}</h3>
+
+              {event.media.kind === 'video' && (
+                <div class="t25__media">
+                  <VideoCard
+                    src={event.media.src}
+                    alt={isTodo(event.media.alt) ? event.title : event.media.alt}
+                    aspect={event.media.aspect}
+                    title={event.title}
+                    sizes="(max-width: 48rem) 82vw, 20rem"
+                  />
+                </div>
+              )}
+
+              {event.media.kind === 'image' && image && (
+                <div class="t25__media">
+                  <Picture
+                    src={image}
+                    formats={['avif']}
+                    fallbackFormat="webp"
+                    widths={[320, 480, 720]}
+                    sizes="(max-width: 48rem) 82vw, 20rem"
+                    alt={isTodo(event.media.alt) ? event.title : event.media.alt}
+                    loading="lazy"
+                    decoding="async"
+                    style={`aspect-ratio: ${aw} / ${ah};`}
+                    class="t25__image"
+                  />
+                </div>
+              )}
+
+              {!isTodo(event.story) && event.story && <p class="t25__story">{event.story}</p>}
+            </article>
+          </li>
+        );
+      })
+    }
+  </ol>
+</div>
+
+<style>
+  .t25 {
+    position: relative;
+  }
+
+  .t25__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+  }
+
+  /* The spine. */
+  .t25__list::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0.5rem;
+    width: 2px;
+    background: var(--p-primary);
+    opacity: 0.5;
+  }
+
+  .t25__row {
+    position: relative;
+    padding-left: 2.25rem;
+    padding-bottom: 3rem;
+  }
+
+  .t25__dot {
+    position: absolute;
+    top: 0.35rem;
+    left: 0;
+    width: 1.05rem;
+    height: 1.05rem;
+    border-radius: 50%;
+    background: var(--p-primary);
+    border: 3px solid var(--p-bg);
+  }
+
+  .t25__card {
+    background: var(--p-surface);
+    border: 1px solid var(--p-border);
+    border-radius: var(--r-2025-card);
+    box-shadow: var(--shadow-2025);
+    padding: 1.5rem;
+  }
+
+  .t25__title {
+    margin: 0 0 1rem;
+    font-family: var(--font-2025-display);
+    font-weight: 700;
+    font-size: var(--t-2025-card);
+    line-height: var(--lh-2025);
+    color: var(--p-text-strong);
+  }
+
+  .t25__media {
+    max-width: 20rem;
+  }
+
+  .t25__image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: var(--r-2025-media);
+  }
+
+  .t25__story {
+    margin: 1rem 0 0;
+    color: var(--p-text);
+    font-size: var(--t-2025-body);
+    line-height: var(--lh-2025);
+  }
+
+  /* Alternating rail from 48rem up — the 2025 layout. Below that it stacks,
+     which 2025 handled with a single 768px rule. */
+  @media (min-width: 48rem) {
+    .t25__list::before {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .t25__row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding-left: 0;
+      padding-bottom: 4rem;
+    }
+
+    .t25__row .t25__card {
+      grid-column: 1;
+      margin-right: 3rem;
+    }
+
+    .t25__row--right .t25__card {
+      grid-column: 2;
+      margin-right: 0;
+      margin-left: 3rem;
+    }
+
+    .t25__dot {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+</style>

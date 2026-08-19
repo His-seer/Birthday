@@ -1,0 +1,188 @@
+---
+import TimelineEntry from './TimelineEntry.astro';
+import { isTodo } from '../lib/content';
+
+interface Props {
+  years: Array<{
+    year: number;
+    label: string;
+    events: any[];
+  }>;
+}
+
+const { years } = Astro.props;
+
+// Newest first. The most recent year is open; earlier years collapse.
+const sorted = [...years].sort((a, b) => b.year - a.year);
+const totalEvents = sorted.reduce((n, y) => n + y.events.length, 0);
+---
+
+{/*
+  GROWTH MODEL — the brief asks this to work for 14 entries now and 60+ in five
+  years, and DESIGN.md's charge is that the old section was 78% of the page for
+  content that is 14 captions averaging ~30 characters.
+
+  Resolution (your decision): the timeline stays cumulative and append-only,
+  but stops being the page's centre of gravity. The letter is the spine.
+
+  At scale: only the most recent year renders at full weight. Every earlier
+  year collapses to a one-line chapter head that expands on demand. Year five
+  is therefore one open year plus five collapsed rules, not five years of
+  scroll. <details> means this works with no JS at all.
+*/}
+<div class="timeline">
+  <nav class="timeline__years" aria-label="Jump to year">
+    <ul role="list">
+      {
+        sorted.map((y) => (
+          <li>
+            <a href={`#year-${y.year}`}>{y.year}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+
+  {
+    sorted.map((y, i) => {
+      const isCurrent = i === 0;
+      const heading = isTodo(y.label) ? String(y.year) : y.label;
+
+      return isCurrent ? (
+        <section class="timeline__year" id={`year-${y.year}`} aria-labelledby={`year-${y.year}-h`}>
+          <h3 class="timeline__year-head" id={`year-${y.year}-h`}>
+            {heading}
+            <span class="timeline__count u-micro">
+              {y.events.length} {y.events.length === 1 ? 'moment' : 'moments'}
+            </span>
+          </h3>
+          {y.events.map((event) => (
+            <TimelineEntry event={event} year={y.year} />
+          ))}
+        </section>
+      ) : (
+        <details class="timeline__year timeline__year--past" id={`year-${y.year}`}>
+          <summary class="timeline__year-head">
+            {heading}
+            <span class="timeline__count u-micro">
+              {y.events.length} {y.events.length === 1 ? 'moment' : 'moments'}
+            </span>
+          </summary>
+          <div class="timeline__past-body">
+            {y.events.map((event) => (
+              <TimelineEntry event={event} year={y.year} />
+            ))}
+          </div>
+        </details>
+      );
+    })
+  }
+
+  <p class="timeline__total u-micro">
+    {totalEvents} moments, {sorted.length} {sorted.length === 1 ? 'year' : 'years'}
+  </p>
+</div>
+
+<style>
+  .timeline {
+    width: 100%;
+  }
+
+  .timeline__years ul {
+    list-style: none;
+    margin: 0 0 var(--space-8);
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .timeline__years a {
+    display: inline-flex;
+    align-items: center;
+    /* >= 44px tap target (AUDIT M3). */
+    min-height: var(--tap-min);
+    padding-inline: var(--space-4);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-surface);
+    color: var(--ink-muted);
+    text-decoration: none;
+    font-size: var(--text-caption);
+    letter-spacing: 0.06em;
+    transition:
+      color var(--dur-fast) var(--ease),
+      border-color var(--dur-fast) var(--ease);
+  }
+
+  .timeline__years a:hover {
+    color: var(--burgundy);
+    border-color: var(--burgundy);
+  }
+
+  .timeline__year-head {
+    /* Sticky year marker: orientation the old dotted spine only pretended to
+       give. Scroll-margin keeps the anchor clear of the sticky header. */
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin: 0;
+    padding-block: var(--space-4);
+    background: var(--paper);
+    border-bottom: 1px solid var(--burgundy);
+    font-family: var(--font-display);
+    font-size: var(--text-heading);
+    line-height: var(--lh-heading);
+    letter-spacing: var(--track-heading);
+    font-variation-settings: 'opsz' 96;
+    scroll-margin-top: var(--space-16);
+  }
+
+  .timeline__count {
+    flex: none;
+    font-family: var(--font-text);
+  }
+
+  .timeline__year {
+    scroll-margin-top: var(--space-16);
+  }
+
+  .timeline__year--past > summary {
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .timeline__year--past > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .timeline__year--past > summary::after {
+    content: '';
+    flex: none;
+    width: 0.6em;
+    height: 0.6em;
+    margin-left: var(--space-2);
+    border-right: 2px solid var(--burgundy);
+    border-bottom: 2px solid var(--burgundy);
+    transform: rotate(45deg) translateY(-0.15em);
+    transition: transform var(--dur-mid) var(--ease);
+  }
+
+  .timeline__year--past[open] > summary::after {
+    transform: rotate(-135deg) translateY(-0.15em);
+  }
+
+  .timeline__year--past > summary:focus-visible {
+    outline: 2px solid var(--burgundy);
+    outline-offset: 3px;
+  }
+
+  .timeline__total {
+    margin-top: var(--space-12);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--hairline);
+  }
+</style>

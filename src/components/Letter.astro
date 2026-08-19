@@ -1,0 +1,176 @@
+---
+import { isTodo, orElse } from '../lib/content';
+import { getVideo } from '../lib/media';
+import VideoCard from './VideoCard.astro';
+
+interface Props {
+  title: string;
+  paragraphs: string[];
+  closing: string[];
+  signature: string;
+  /** Extension-less base, e.g. "timeline/2026/hero-video". */
+  video?: string;
+  videoAlt?: string;
+}
+
+const { title, paragraphs, closing, signature, video, videoAlt } = Astro.props;
+
+/* When the letter is SPOKEN, the film is the letter.
+   Unwritten paragraphs are then not "awaiting content" — they are content that
+   will never be written, and rendering five placeholder cards under a message
+   that is already complete reads as an unfinished page. So with a film present
+   only REAL text survives; placeholders are dropped. Adding written paragraphs
+   later still works, and they will sit alongside the film. */
+const spoken = Boolean(video);
+const bodyParagraphs = paragraphs.filter((p) => !isTodo(p));
+const closingLines = closing.filter((l) => !isTodo(l));
+
+// Aspect from the manifest, never authored: the transcode is the only thing
+// that knows the clip's true display shape, and a guess reintroduces CLS.
+const clip = video ? getVideo(video) : null;
+const clipAspect = clip ? `${clip.width}:${clip.height}` : null;
+---
+
+{/*
+  THE LETTER — the spine of the page.
+
+  DESIGN.md measured the old site at 78% timeline / 7% message and called that
+  ratio "the design problem in one line". This section is now the destination,
+  not the footer.
+
+  Both arrays render in full at any length. Last year hardcoded six <p> tags
+  but wired only three (messageText1..3), so paragraphs four to six were
+  unreachable by design; and there were two .message-highlight elements but the
+  selector was querySelector — singular — so the second could never be edited.
+*/}
+<section class="letter" id="letter" aria-labelledby="letter-h">
+  <div class="letter__inner u-wrap">
+    <h2 class:list={['letter__h', 'reveal', spoken && 'letter__h--centred']} id="letter-h">
+      {isTodo(title) ? '' : title}
+    </h2>
+
+    {
+      video && clipAspect && (
+        <div class="letter__film">
+          <VideoCard
+            src={video}
+            alt={orElse(videoAlt ?? '', 'A recorded birthday message')}
+            aspect={clipAspect}
+            title={isTodo(title) ? 'Birthday message' : title}
+            sizes="(max-width: 620px) 88vw, 380px"
+            expand
+          />
+        </div>
+      )
+    }
+
+    <div class="letter__body">
+      {bodyParagraphs.map((paragraph) => <p class="letter__p reveal">{paragraph}</p>)}
+    </div>
+
+    {
+      closingLines.length > 0 && (
+        <div class="letter__closing">
+          {closingLines.map((line) => <p class="letter__closing-line reveal">{line}</p>)}
+        </div>
+      )
+    }
+
+    {
+      !isTodo(signature) && signature && (
+        <p class="letter__signature reveal">{signature}</p>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  /* Centred, and narrow because the clip is portrait 9:16 — at full measure it
+     would be taller than the viewport and stop being a message inside a page. */
+  .letter__film {
+    /* --space-8, not --space-7: the scale is 1/2/3/4/6/8/12…, and an undefined
+       var() invalidates the whole shorthand at computed-value time — which
+       silently took the `auto` with it and left the film hard against the
+       left edge. */
+    margin: var(--space-8) auto 0;
+    max-width: 380px;
+  }
+
+  /* Centred only when a film carries the section. With written paragraphs the
+     letter stays left-aligned, because centred body copy is harder to read. */
+  .letter__h--centred {
+    text-align: center;
+  }
+
+  .letter {
+    padding-block: var(--section-gap-major);
+    background: var(--paper-sunk);
+  }
+
+  .letter__inner {
+    max-width: var(--wide-max);
+  }
+
+  .letter__h {
+    /* Burgundy, matching the name on the title page.
+
+       TitlePage states the rule: "Burgundy appears exactly ONCE here, on the
+       name... last year indigo marked the hero AND every section title AND the
+       spine AND all 14 dots, so it marked nothing." This takes the count from
+       one to three, so it is worth being precise about why these two and no
+       others: the letter and the things-list are the sections where she is
+       addressed directly. Photographs, Clips and The journey stay in ink.
+       Extend it to those and the accent stops meaning anything, exactly as the
+       indigo did. */
+    color: var(--burgundy);
+    font-size: var(--text-title);
+    line-height: var(--lh-title);
+    letter-spacing: var(--track-title);
+    font-variation-settings: 'opsz' 96;
+    max-width: var(--measure);
+    margin-bottom: var(--space-12);
+  }
+
+  .letter__body {
+    /* 62-68ch, LEFT-ALIGNED, ragged right. Last year: 79ch and CENTRED, which
+       removes the fixed left edge that makes the line return findable — the
+       least readable configuration available, applied to the most important
+       text on the site. */
+    max-width: var(--measure);
+    font-size: var(--text-body-lg);
+    line-height: var(--lh-body-lg);
+  }
+
+  .letter__p + .letter__p {
+    /* Paragraph rhythm: space between thoughts, not the flat 1em everywhere. */
+    margin-top: var(--space-8);
+  }
+
+  .letter__closing {
+    max-width: var(--measure);
+    margin-top: var(--space-16);
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--hairline);
+  }
+
+  .letter__closing-line {
+    font-size: var(--text-lead);
+    line-height: var(--lh-lead);
+    color: var(--burgundy);
+  }
+
+  .letter__closing-line + .letter__closing-line {
+    margin-top: var(--space-4);
+  }
+
+  .letter__signature {
+    margin-top: var(--space-12);
+    font-family: var(--font-display);
+    font-size: var(--text-subhead);
+    font-variation-settings: 'opsz' 72, 'WONK' 1;
+    color: var(--ink);
+  }
+
+
+
+</style>

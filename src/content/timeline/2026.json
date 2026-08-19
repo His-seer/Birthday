@@ -1,0 +1,242 @@
+{
+  "year": 2026,
+  "label": "2026",
+  "_note": "CUMULATIVE, append-only. ARRAY ORDER IS THE RENDERED ORDER — dates are display-only, because several stills are screenshots whose EXIF is the screenshot date, not the moment. Titles are the client's Drive labels verbatim.",
+  "events": [
+    {
+      "id": "pivotal",
+      "date": null,
+      "title": "Pivotal🥺❤️",
+      "story": "TODO-CONTENT",
+      "media": {
+        "kind": "image",
+        "src": "timeline/2026/pivotal",
+        "alt": "TODO-CONTENT",
+        "aspect": "2:3"
+      }
+    },
+    {
+      "id": "first-hello-of-2026",
+      "date": null,
+      "title": "First hello of 2026🤪",
+      "story": "TODO-CONTENT",
+      "media": {
+        "kind": "video",
+        "src": "timeline/2026/first-hello-of-2026",
+        "alt": "TODO-CONTENT",
+        "aspect": "9:16",
+        "poster": "timeline/2026/first-hello-of-2026-poster"
+      }
+    },
+    {
+      "id": "batsi-watching-the-fruit-of-her-labor",
+      "date": "2026-01-14",
+      "title": "Batsi watching the fruit of her labor 😂",
+      "story": "TODO-CONTENT",
+      "media": {
+        "kind": "image",
+        "src": "timeline/2026/batsi-watching-the-fruit-of-her-labor",
+        "alt": "TODO-CONTENT",
+        "aspect": "83:180"
+      }
+    },
+    {
+      "id": "a-glimpse-into-our-future-fr-fr",
+      "date": "2026-01-16",
+      "title": "A glimpse into our future fr fr😂",
+      "story": "TODO-CONTENT",
+      "media": {
+        "kind": "video",
+        "src": "timeline/2026/a-glimpse-into-our-future-fr-fr",
+        "alt": "TODO-CONTENT",
+        "aspect": "9:16",
+        "poster": "timeline/2026/a-glimpse-into-our-future-fr-fr-poster"
+      }
+    },
+    {
+      "id": "shy-trumpetist",
+      "date": "2026-01-20",
+      "title": "Shy trumpetist😂",
+      "story": "TODO-CONTENT",
+      "media": {
+        "kind": "video",
+        "src": "timeline/2026/shy-trumpetist",
+        "alt": "TODO-CONTENT",
+        "aspect": "3:4",
+        "poster": "timeline/2026/shy-trumpetist-poster"
+      }
+    },
+    {
+      "id": "chef-chronicles",
+      "date": null,
+      "title": "Chef chronicles🧑‍🍳👩‍🍳",
+      "story": "TODO-CONTENT",
+      "media": {
+        "kind": "video",
+        "src": "timeline/2026/chef-chronicles",
+        "alt": "TODO-CONTENT",
+        "aspect": "9:16",
+        "poster": "timeline/2026/chef-chronicles-poster"
+      }
+    },
+    {
+      "id": "family-bonding-timeee-2",
+      "date": null,
+      "title": "Family bonding timeee",
+      "story": "TODO-CONTENT",
+      "media": {
+        "kind": "image",
+        "src": "timeline/2026/family-bonding-timeee-2",
+        "alt": "TODO-CONTENT",
+        "aspect": "393:520"
+      }
+    },
+    {
+      "id": "nap-time",
+      "date": null,
+      "title": "Nap time🥹",
+      "story": "TODO-CONTENT",
+      "media": {
+        "kind": "image",
+        "src": "timeline/2026/nap-time",
+        "alt": "TODO-CONTENT",
+        "aspect": "1013:1800"
+      }
+    },
+    {
+      "id": "nap-time-2",
+      "date": null,
+      "title": "Nap time🥺",
+      "story": "TODO-CONTENT",
+      "media": {
+        "kind": "image",
+        "src": "timeline/2026/nap-time-2",
+        "alt": "TODO-CONTENT",
+        "aspect": "1013:1800"
+      }
+    },
+    {
+      "id": "a-glimpse-into-our-future",
+      "date": "2026-01-24",
+      "title": "A glimpse into our future 👀😂",
+      "story": "TODO-CONTENT",
+      "media": {
+        "kind": "video",
+        "src": "timeline/2026/a-glimpse-into-our-future",
+        "alt": "TODO-CONTENT",
+        "aspect": "3:4",
+        "poster": "timeline/2026/a-glimpse-into-our-future-poster"
+      }
+    },
+    {
+      "id": "moments-before-you-popped-the-question",
+      "date": "2026-01-24",
+      "title": "Moments before you popped the question🤭",
+      "story": "TODO-CONTENT",
+      "media": {
+        "kind": "video",
+        "src": "timeline/2026/moments-before-you-popped-the-question",
+        "alt": "TODO-CONTENT",
+        "aspect": "9:16",
+        "poster": "timeline/2026/moments-before-you-popped-the-question-poster"
+      }
+    },
+    {
+      "id": "moments-after-you-popped-the-question",
+      "date": "2026-01-24",
+      "title": "Moments after you popped the question🥰",
+      "story": "TODO-CONTENT",
+      "media": {
+        "kind": "image",
+        "src": "timeline/2026/moments-after-you-popped-the-question",
+        "alt": "TODO-CONTENT",
+        "aspect": "131:176"
+      }
+    },
+    {
+      "id": "island-babiessss",
+      "date": "2026-01-24",
+      "title": "Island babiessss",
+      "story": "TODO-CONTENT",
+      "media": {
+        "kind": "image",
+        "src": "timeline/2026/island-babiessss",
+        "alt": "TODO-CONTENT",
+        "aspect": "589:771"
+      }
+    },
+    {
+      "id": "first-date-night",
+      "date": "2026-01-26",
+      "title": "First date night❤️",
+      "story": "TODO-CONTENT",
+      "media": {
+        "kind": "image",
+        "src": "timeline/2026/first-date-night",
+        "alt": "TODO-CONTENT",
+        "aspect": "3:4"
+      }
+    },
+    {
+      "id": "hate-these-goodbyes",
+      "date": "2026-01-27",
+      "title": "Hate these goodbyes☹️",
+      "story": "TODO-CONTENT",
+      "media": {
+        "kind": "video",
+        "src": "timeline/2026/hate-these-goodbyes",
+        "alt": "TODO-CONTENT",
+        "aspect": "240:427",
+        "poster": "timeline/2026/hate-these-goodbyes-poster"
+      }
+    },
+    {
+      "id": "second-conference-together",
+      "date": "2026-05-05",
+      "title": "Second conference together🫶",
+      "story": "TODO-CONTENT",
+      "media": {
+        "kind": "image",
+        "src": "timeline/2026/second-conference-together",
+        "alt": "TODO-CONTENT",
+        "aspect": "4:3"
+      }
+    },
+    {
+      "id": "first-wedding-together",
+      "date": null,
+      "title": "First wedding together👀",
+      "story": "TODO-CONTENT",
+      "media": {
+        "kind": "image",
+        "src": "timeline/2026/first-wedding-together",
+        "alt": "TODO-CONTENT",
+        "aspect": "1280:959"
+      }
+    },
+    {
+      "id": "second-wedding-together",
+      "date": "2026-05-09",
+      "title": "Second wedding together 💋",
+      "story": "TODO-CONTENT",
+      "media": {
+        "kind": "image",
+        "src": "timeline/2026/second-wedding-together",
+        "alt": "TODO-CONTENT",
+        "aspect": "3:4"
+      }
+    },
+    {
+      "id": "first-photoshoot",
+      "date": "2026-06-05",
+      "title": "First photoshoot🥹",
+      "story": "TODO-CONTENT",
+      "media": {
+        "kind": "image",
+        "src": "timeline/2026/first-photoshoot",
+        "alt": "TODO-CONTENT",
+        "aspect": "3:4"
+      }
+    }
+  ]
+}

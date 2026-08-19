@@ -1,0 +1,85 @@
+---
+/**
+ * PREVIEW ONLY — Direction A ("The Contact Sheet") in isolation.
+ *
+ * Here so both timeline directions can be looked at before one is chosen.
+ * Direction B ("The Spine, Rebuilt") is live on the real page at /.
+ *
+ * DELETE THIS FILE once a direction is picked. It is noindex like everything
+ * else, but it is scaffolding, not part of the gift.
+ */
+import Layout from '../layouts/Layout.astro';
+import TimelineContactSheet from '../components/TimelineContactSheet.astro';
+import Timeline from '../components/Timeline.astro';
+import { getTimeline } from '../lib/content';
+
+const timeline = await getTimeline();
+---
+
+<Layout
+  title="Timeline — Direction A preview"
+  description="Preview"
+  fallbackTitle="Timeline — Direction A preview"
+>
+  <div class="pv">
+    <div class="u-wrap">
+      <p class="u-micro">Preview · not part of the site</p>
+      <h1 class="pv__h">Direction A — The Contact Sheet</h1>
+      <p class="pv__note">
+        Year chapters, uniform grid tiles. Compare with <a href="/">Direction B</a>, which is
+        currently live on the real page.
+      </p>
+    </div>
+  </div>
+
+  <section class="section section--sunk" aria-label="Direction A">
+    <div class="u-wrap">
+      <TimelineContactSheet years={timeline} />
+    </div>
+  </section>
+
+  <div class="pv pv--b">
+    <div class="u-wrap">
+      <h2 class="pv__h">Direction B — The Spine, Rebuilt</h2>
+      <p class="pv__note">Single-column rail, sticky year markers. Currently live.</p>
+    </div>
+  </div>
+
+  <section class="section" aria-label="Direction B">
+    <div class="u-wrap">
+      <Timeline years={timeline} />
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .pv {
+    padding-block: var(--space-16) var(--space-8);
+  }
+
+  .pv--b {
+    border-top: 1px solid var(--hairline);
+    margin-top: var(--space-16);
+  }
+
+  .pv__h {
+    font-size: var(--text-title);
+    line-height: var(--lh-title);
+    letter-spacing: var(--track-title);
+    font-variation-settings: 'opsz' 96;
+    margin-block: var(--space-2) var(--space-4);
+  }
+
+  .pv__note {
+    color: var(--ink-muted);
+    max-width: var(--measure);
+  }
+
+  .section {
+    padding-block: var(--section-gap);
+  }
+
+  .section--sunk {
+    background: var(--paper-sunk);
+  }
+</style>

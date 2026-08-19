@@ -1,0 +1,395 @@
+{
+  "year": 2026,
+  "_note": "PER-YEAR content. Replaced annually. NOTHING from a previous year may appear in this file. Last year's message lives in src/content/archive/2025.json, which is deliberately route-less and in no collection, so no page here can reach it. Every TODO-CONTENT below is awaiting client content — see PLAN.md section 11.",
+  "names": {
+    "primary": "My Ish",
+    "alternates": [
+      "Bruce",
+      "Bryan"
+    ]
+  },
+  "hero": {
+    "greeting": "Happy Birthday",
+    "subtitle": "TODO-CONTENT"
+  },
+  "meta": {
+    "title": "TODO-CONTENT",
+    "description": "TODO-CONTENT",
+    "ogImage": "og/2026-title-card"
+  },
+  "message": {
+    "title": "Birthday message",
+    "paragraphs": [
+      "TODO-CONTENT — paragraph 1. This array takes any number of paragraphs. Last year hardcoded six <p> tags but wired only three, so paragraphs four to six were unreachable by design (AUDIT N4).",
+      "TODO-CONTENT — paragraph 2.",
+      "TODO-CONTENT — paragraph 3."
+    ],
+    "closing": [
+      "TODO-CONTENT — closing line 1. Also an array: last year had two .message-highlight elements but the selector was querySelector (singular), so the second could never be edited.",
+      "TODO-CONTENT — closing line 2."
+    ],
+    "signature": "TODO-CONTENT",
+    "video": "timeline/2026/hero-video",
+    "videoAlt": "TODO-CONTENT"
+  },
+  "items": {
+    "titleTemplate": "{count} Things I love about {name}",
+    "titleName": "Bruce",
+    "entries": [
+      "TODO-CONTENT 1",
+      "TODO-CONTENT 2",
+      "TODO-CONTENT 3",
+      "TODO-CONTENT 4",
+      "TODO-CONTENT 5",
+      "TODO-CONTENT 6",
+      "TODO-CONTENT 7",
+      "TODO-CONTENT 8",
+      "TODO-CONTENT 9",
+      "TODO-CONTENT 10",
+      "TODO-CONTENT 11",
+      "TODO-CONTENT 12",
+      "TODO-CONTENT 13",
+      "TODO-CONTENT 14",
+      "TODO-CONTENT 15",
+      "TODO-CONTENT 16",
+      "TODO-CONTENT 17",
+      "TODO-CONTENT 18",
+      "TODO-CONTENT 19",
+      "TODO-CONTENT 20",
+      "TODO-CONTENT 21",
+      "TODO-CONTENT 22",
+      "TODO-CONTENT 23",
+      "TODO-CONTENT 24"
+    ],
+    "video": "timeline/2026/things-video",
+    "videoAlt": "TODO-CONTENT"
+  },
+  "gallery": [
+    {
+      "src": "photos/2026/img-2963",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "83:180",
+      "plate": false
+    },
+    {
+      "src": "photos/2026/img-3628",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "83:180",
+      "plate": false
+    },
+    {
+      "src": "photos/2026/img-3976",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "1013:1800",
+      "plate": false
+    },
+    {
+      "src": "photos/2026/img-7367",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "1013:1800",
+      "plate": false
+    },
+    {
+      "src": "photos/2026/img-3578",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "3:4",
+      "plate": false
+    },
+    {
+      "src": "photos/2026/img-3580",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "3:4",
+      "plate": false
+    },
+    {
+      "src": "photos/2026/img-7327",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "1179:869",
+      "plate": true
+    },
+    {
+      "src": "photos/2026/img-2619",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "1117:1800",
+      "plate": false
+    },
+    {
+      "src": "photos/2026/img-7331",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "1178:861",
+      "plate": true
+    },
+    {
+      "src": "photos/2026/img-2572",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "3:4",
+      "plate": false
+    },
+    {
+      "src": "photos/2026/img-3592",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "3:4",
+      "plate": false
+    },
+    {
+      "src": "photos/2026/img-3600",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "3:4",
+      "plate": false
+    },
+    {
+      "src": "photos/2026/img-3734",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "3:4",
+      "plate": false
+    },
+    {
+      "src": "photos/2026/img-4485",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "3:4",
+      "plate": false
+    },
+    {
+      "src": "photos/2026/img-4941",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "3:4",
+      "plate": false
+    },
+    {
+      "src": "photos/2026/img-5014",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "3:4",
+      "plate": false
+    },
+    {
+      "src": "photos/2026/img-5082",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "3:4",
+      "plate": false
+    },
+    {
+      "src": "photos/2026/img-3843",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "3:4",
+      "plate": false
+    },
+    {
+      "src": "photos/2026/img-7324",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "393:521",
+      "plate": false
+    },
+    {
+      "src": "photos/2026/img-7328",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "131:173",
+      "plate": false
+    },
+    {
+      "src": "photos/2026/img-7330",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "1179:1543",
+      "plate": false
+    },
+    {
+      "src": "photos/2026/img-7329",
+      "alt": "TODO-CONTENT",
+      "caption": "TODO-CONTENT",
+      "aspect": "393:512",
+      "plate": false
+    }
+  ],
+  "clips": [
+    {
+      "src": "timeline/2026/0fca379d-e307-47e3-9e27-6a630e0283e4",
+      "alt": "TODO-CONTENT",
+      "aspect": "240:427"
+    },
+    {
+      "src": "timeline/2026/16fc1b98-7c53-402a-9329-f1c380496789",
+      "alt": "TODO-CONTENT",
+      "aspect": "240:427"
+    },
+    {
+      "src": "timeline/2026/1a54c261-7fb7-46c8-892e-4b9d684fb8e2",
+      "alt": "TODO-CONTENT",
+      "aspect": "240:427"
+    },
+    {
+      "src": "timeline/2026/2a4b5dbe-384e-48a1-9865-5ac5f560b632",
+      "alt": "TODO-CONTENT",
+      "aspect": "9:16"
+    },
+    {
+      "src": "timeline/2026/3dd0a875-83b2-4ea5-aeb9-f0d9937c4a8a",
+      "alt": "TODO-CONTENT",
+      "aspect": "9:16"
+    },
+    {
+      "src": "timeline/2026/4c30112b-4333-4afc-a5aa-b34b554b4463",
+      "alt": "TODO-CONTENT",
+      "aspect": "9:16"
+    },
+    {
+      "src": "timeline/2026/58bef2f1-0aca-4168-aaf2-1695db504166",
+      "alt": "TODO-CONTENT",
+      "aspect": "9:16"
+    },
+    {
+      "src": "timeline/2026/8a093d0d-1bc3-4a40-b824-5de6ddba21d1",
+      "alt": "TODO-CONTENT",
+      "aspect": "9:16"
+    },
+    {
+      "src": "timeline/2026/9a782dd7-e41e-49c6-a754-e5bb700a1644",
+      "alt": "TODO-CONTENT",
+      "aspect": "9:16"
+    },
+    {
+      "src": "timeline/2026/a02d5a7d-1531-4344-9de8-2f4965f006ea",
+      "alt": "TODO-CONTENT",
+      "aspect": "9:16"
+    },
+    {
+      "src": "timeline/2026/a4f22db7-c1be-43fc-abd0-135d31ebc5de",
+      "alt": "TODO-CONTENT",
+      "aspect": "9:16"
+    },
+    {
+      "src": "timeline/2026/adab0e6c-80e3-4f93-bd91-bb53773d8f75",
+      "alt": "TODO-CONTENT",
+      "aspect": "240:427"
+    },
+    {
+      "src": "timeline/2026/c04e1914-2bff-4e54-9e07-d5db11044f67",
+      "alt": "TODO-CONTENT",
+      "aspect": "9:16"
+    },
+    {
+      "src": "timeline/2026/c2f48a9a-6ad8-48fc-af04-ec771dc4a782",
+      "alt": "TODO-CONTENT",
+      "aspect": "240:427"
+    },
+    {
+      "src": "timeline/2026/e78fd12f-913f-416e-9a1d-517e56b8a676",
+      "alt": "TODO-CONTENT",
+      "aspect": "9:16"
+    },
+    {
+      "src": "timeline/2026/edf5dad7-39e3-4798-be30-02d2dc71502b",
+      "alt": "TODO-CONTENT",
+      "aspect": "240:427"
+    },
+    {
+      "src": "timeline/2026/ee68d2a9-1aa2-4903-a4c0-910329560f1e",
+      "alt": "TODO-CONTENT",
+      "aspect": "9:16"
+    },
+    {
+      "src": "timeline/2026/f7df6108-20ad-44e7-b04b-6f792f094273",
+      "alt": "TODO-CONTENT",
+      "aspect": "9:16"
+    },
+    {
+      "src": "timeline/2026/ff3fdf88-4f85-49b7-a7ae-e46910c255ab",
+      "alt": "TODO-CONTENT",
+      "aspect": "9:16"
+    },
+    {
+      "src": "timeline/2026/img-1318",
+      "alt": "TODO-CONTENT",
+      "aspect": "9:16"
+    },
+    {
+      "src": "timeline/2026/img-3660",
+      "alt": "TODO-CONTENT",
+      "aspect": "16:9"
+    },
+    {
+      "src": "timeline/2026/img-3709",
+      "alt": "TODO-CONTENT",
+      "aspect": "9:16"
+    },
+    {
+      "src": "timeline/2026/img-4438",
+      "alt": "TODO-CONTENT",
+      "aspect": "3:4"
+    },
+    {
+      "src": "timeline/2026/img-4576",
+      "alt": "TODO-CONTENT",
+      "aspect": "9:16"
+    },
+    {
+      "src": "timeline/2026/img-4684",
+      "alt": "TODO-CONTENT",
+      "aspect": "9:16"
+    },
+    {
+      "src": "timeline/2026/img-4804",
+      "alt": "TODO-CONTENT",
+      "aspect": "3:4"
+    },
+    {
+      "src": "timeline/2026/img-4861",
+      "alt": "TODO-CONTENT",
+      "aspect": "9:16"
+    },
+    {
+      "src": "timeline/2026/img-4974",
+      "alt": "TODO-CONTENT",
+      "aspect": "9:16"
+    },
+    {
+      "src": "timeline/2026/img-5010",
+      "alt": "TODO-CONTENT",
+      "aspect": "9:16"
+    },
+    {
+      "src": "timeline/2026/img-5039",
+      "alt": "TODO-CONTENT",
+      "aspect": "9:16"
+    },
+    {
+      "src": "timeline/2026/img-5060",
+      "alt": "TODO-CONTENT",
+      "aspect": "9:16"
+    },
+    {
+      "src": "timeline/2026/img-5089",
+      "alt": "TODO-CONTENT",
+      "aspect": "9:16"
+    },
+    {
+      "src": "timeline/2026/img-5461",
+      "alt": "TODO-CONTENT",
+      "aspect": "9:16"
+    },
+    {
+      "src": "timeline/2026/img-5914",
+      "alt": "TODO-CONTENT",
+      "aspect": "9:16"
+    }
+  ]
+}

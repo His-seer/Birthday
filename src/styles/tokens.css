@@ -1,0 +1,161 @@
+/**
+ * DESIGN TOKENS — "Keepsake" (DESIGN.md section 3)
+ *
+ * Every value here is a decision, not a default. Last year's system was
+ * unmodified Tailwind defaults (indigo-500 on slate-900, shadow-2xl on all 42
+ * elevated surfaces), which is the single loudest "template" tell in DESIGN.md
+ * section 2.8.
+ */
+
+:root {
+  /* ---------------------------------------------------------------- colour */
+  /* Contrast recomputed independently per WCAG 2.1 relative luminance,
+     2026-08-10. Ratios are stated against --paper unless noted.
+
+       ink           on paper       13.32   AAA
+       ink           on paper-sunk  12.08   AAA
+       ink-muted     on paper        5.23   AA
+       ink-muted     on paper-sunk   4.74   AA
+       burgundy      on paper       10.20   AAA
+       paper         on burgundy    10.20   AAA  (reversed)
+       burgundy-deep on paper       13.67   AAA
+       brass         on paper        2.96   FAILS — ornament only, never text
+  */
+  --paper: #f6f2ec;
+  --paper-sunk: #ede7de;
+  --ink: #2a2724;
+  --ink-muted: #6b645c;
+  --burgundy: #6e1a2b;
+  --burgundy-deep: #4a0f1d;
+
+  /* RULES AND ORNAMENT ONLY. Never bind this to a text colour — it fails AA
+     at 2.96:1. If text must ever be brass, use #7a6130 (5.26, passes).
+     scripts/checks/contrast.mjs fails the build if this is used as text. */
+  --brass: #a8894f;
+
+  --hairline: rgb(42 39 36 / 0.1);
+
+  /* ------------------------------------------------------------------ type */
+  --font-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
+  --font-text: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
+
+  /* Base 18px, major third (1.25). Every adjacent step is 1.25x apart, so
+     every step is PERCEPTIBLE. Last year's nine sizes collapsed to two visible
+     steps: consecutive ratios of 1.10/1.09/1.08 are below the ~1.15 threshold
+     at which a size change reads as a change at all.
+
+     Fluid between 390px and 1440px, so 834px stops being an unhandled gap
+     (AUDIT M3: the site had exactly one breakpoint). */
+  --text-display: clamp(2.5rem, 1.804rem + 2.857vw, 4.375rem); /* 40 -> 70 */
+  --text-title: clamp(2.125rem, 1.638rem + 2vw, 3.4375rem); /* 34 -> 55 */
+  --text-heading: clamp(1.75rem, 1.379rem + 1.524vw, 2.75rem); /* 28 -> 44 */
+  --text-subhead: clamp(1.5rem, 1.245rem + 1.048vw, 2.1875rem); /* 24 -> 35 */
+  --text-lead: clamp(1.375rem, 1.236rem + 0.571vw, 1.75rem); /* 22 -> 28 */
+  --text-body-lg: clamp(1.1875rem, 1.118rem + 0.286vw, 1.375rem); /* 19 -> 22 */
+  --text-body: clamp(1.0625rem, 1.039rem + 0.095vw, 1.125rem); /* 17 -> 18 */
+  --text-caption: 0.875rem; /* 14 */
+  --text-micro: 0.75rem; /* 12 */
+
+  /* Leading TIGHTENS as size grows. Last year inverted this by cascading
+     line-height 1.6 onto everything, giving a 64px hero 102px of leading —
+     DESIGN.md calls it the most visible typographic tell on the site. */
+  --lh-display: 1.05;
+  --lh-title: 1.1;
+  --lh-heading: 1.15;
+  --lh-subhead: 1.2;
+  --lh-lead: 1.4;
+  --lh-body-lg: 1.6;
+  --lh-body: 1.65;
+  --lh-caption: 1.45;
+  --lh-micro: 1.4;
+
+  /* Letter-spacing was `normal` on every element last year — zero declarations
+     in the entire stylesheet. Large serif wants negative tracking; micro labels
+     want positive. */
+  --track-display: -0.03em;
+  --track-title: -0.025em;
+  --track-heading: -0.02em;
+  --track-subhead: -0.01em;
+  --track-micro: 0.12em;
+
+  /* Optical size axis. Fraunces at high opsz has the weight and warmth the
+     brief calls for; at low opsz it is a text face. */
+  --opsz-display: 144;
+  --opsz-title: 96;
+  --opsz-heading: 72;
+
+  /* Measure: 62-68ch, left-aligned. Not 79ch and not centred, which is the
+     least readable configuration available and was applied to the most
+     important text on the site. */
+  --measure: 65ch;
+  --measure-narrow: 52ch;
+
+  /* --------------------------------------------------------------- spacing */
+  /* Base 4, non-linear so the scale EXPRESSES hierarchy rather than just
+     measuring it. The rule that fixes "2rem does everything" (26 of 34
+     declarations last year were 32px or 16px):
+
+       intra   4-24    inside a component
+       inter   32-64   between components
+       section 96-192  between sections
+
+     Intra and inter must never share a value. */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+  --space-48: 12rem;
+
+  --section-gap: clamp(6rem, 4.5rem + 6.15vw, 8rem);
+  --section-gap-major: clamp(8rem, 4.19rem + 15.6vw, 12rem);
+
+  --content-max: 42rem;
+  --wide-max: 72rem;
+  --gutter: clamp(1.25rem, 0.5rem + 3.08vw, 2.5rem);
+
+  /* ------------------------------------------------- radii and elevation */
+  /* Print keepsakes have square corners. Last year used six radii
+     (15/50%/12/2/20/50px) with 12 and 15 sitting side by side on the same
+     card — the clearest fingerprint of ad-hoc authoring. */
+  --radius-photo: 2px;
+  --radius-surface: 4px;
+
+  /* Paper does not float. Structure comes from rules and paper-tone shifts.
+     Last year applied one Tailwind shadow-2xl to 42 elements — a hero-scale
+     50px blur on 63px invisible thumbnails, so there was no elevation
+     hierarchy at all. */
+  --elev-photo: 0 1px 2px rgb(42 39 36 / 0.08), 0 8px 24px rgb(42 39 36 / 0.06);
+  --elev-lift: 0 2px 4px rgb(42 39 36 / 0.1), 0 16px 40px rgb(42 39 36 / 0.08);
+
+  /* ---------------------------------------------------------------- motion */
+  /* "Nothing moves unless she caused it." Autonomous motion makes a page feel
+     like a product performing for an audience it cannot see. */
+  --ease: cubic-bezier(0.2, 0.7, 0.3, 1);
+  --dur-fast: 150ms;
+  --dur-mid: 250ms;
+  --dur-reveal: 400ms;
+  --dur-flourish: 1200ms;
+  --reveal-rise: 8px; /* not 30px: at 30 it is an effect, at 8 it is the page settling */
+
+  /* Minimum interactive target. AUDIT M3: the hamburger was 21x28. */
+  --tap-min: 44px;
+}
+
+/* Reduced motion is non-negotiable and was absent entirely last year — zero
+   occurrences across the whole public/ tree, while the site ran an infinite
+   hero float, a 4s carousel rotation, confetti and a fireworks canvas. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 1ms;
+    --dur-mid: 1ms;
+    --dur-reveal: 150ms;
+    --dur-flourish: 1ms;
+    --reveal-rise: 0px;
+  }
+}

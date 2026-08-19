@@ -1,0 +1,179 @@
+---
+import { Picture } from 'astro:assets';
+import VideoCard from './VideoCard.astro';
+import { isTodo } from '../lib/content';
+
+interface Props {
+  event: {
+    id: string;
+    date: string | null;
+    title: string;
+    story: string;
+    media:
+      | { kind: 'none' }
+      | { kind: 'image'; src: string; alt: string; aspect: string }
+      | { kind: 'video'; src: string; alt: string; aspect: string; poster: string };
+  };
+  year: number;
+}
+
+const { event, year } = Astro.props;
+
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/timeline/**/*.jpg', {
+  eager: true,
+});
+
+/* NO per-moment date is rendered.
+ 
+   `date` is still carried in the content files — for the twelve 2026 moments it
+   is real camera EXIF and worth keeping — but it is no longer shown, for two
+   reasons. Half the moments have no trustworthy date at all: several stills are
+   screenshots whose EXIF records when the screenshot was taken (one months
+   after the event it shows), and 2025's fourteen entries all carry a single
+   upload stamp of 2025-09-12 that migrate-2025.mjs documents as a placeholder.
+   Printing a precise day under a photograph asserts a fact, and for most of
+   these the assertion would be false.
+ 
+   Order is authored in the file, so nothing depends on these values. The year
+   still heads each chapter, which is the level at which the dates ARE reliable. */
+
+const image =
+  event.media.kind === 'image' ? images[`/src/assets/${event.media.src}.jpg`]?.default : undefined;
+const aspect = event.media.kind !== 'none' ? event.media.aspect.split(':').map(Number) : [4, 3];
+---
+
+<article class="entry reveal" id={event.id}>
+  <div class="entry__body">
+    <h3 class="entry__title">{event.title}</h3>
+
+    {
+      event.media.kind === 'video' && (
+        <div class="entry__media">
+          <VideoCard
+            src={event.media.src}
+            alt={isTodo(event.media.alt) ? event.title : event.media.alt}
+            aspect={event.media.aspect}
+            title={event.title}
+            sizes="(max-width: 48rem) 92vw, 34rem"
+          />
+        </div>
+      )
+    }
+
+    {
+      event.media.kind === 'image' && image && (
+        <div class="entry__media">
+          <Picture
+            src={image}
+            formats={['avif']}
+            fallbackFormat="webp"
+            widths={[400, 800, 1200]}
+            sizes="(max-width: 48rem) 92vw, 34rem"
+            alt={isTodo(event.media.alt) ? event.title : event.media.alt}
+            loading="lazy"
+            decoding="async"
+            style={`aspect-ratio: ${aspect[0]} / ${aspect[1]};`}
+            class="entry__image"
+          />
+        </div>
+      )
+    }
+
+    {/* Story ALWAYS renders, independent of media. Last year the image and
+        video branches discarded `content` entirely, which is why all 14
+        entries shipped title-only (AUDIT N2). */}
+    {/* An unwritten story renders NOTHING. A row of "Awaiting content" labels
+        tells the reader about the build process rather than about the moment,
+        and the title already carries it. */}
+    {!isTodo(event.story) && event.story && <p class="entry__story">{event.story}</p>}
+  </div>
+</article>
+
+<style>
+  /* DIRECTION B — "The Spine, Rebuilt".
+     Chronology kept, alternation deleted. Last year's rail put a 368px card in
+     a 1440px viewport and left the opposite ~432px of every row empty BY
+     DESIGN — DESIGN.md 2.2 measured one screen where a single card floated
+     right of centre with ~55% of the viewport empty navy. A single column
+     makes that waste structurally impossible and behaves identically at every
+     width, so 834px is not a special case. */
+  .entry {
+    display: grid;
+    gap: var(--space-2);
+    padding-block: var(--space-8);
+    border-top: 1px solid var(--hairline);
+  }
+
+  .entry:first-child {
+    border-top: none;
+  }
+
+  @media (min-width: 48rem) {
+    .entry {
+      /* Single column. This was `9rem 1fr`, where the 9rem rail held the date —
+         with the date gone the rail was an empty gutter beside every moment,
+         and the body was pinned into the narrow remainder. */
+      gap: var(--space-8);
+      padding-block: var(--space-12);
+    }
+  }
+
+  /* Centre the BODY, not its children.
+     34rem is 544px, and the entry column is ~1072px — so capping the body and
+     leaving it flush left is what produced the 528px gutter. Centring here is
+     the actual fix; centring the media inside a 544px body was a no-op. */
+  .entry__body {
+    max-width: 34rem;
+    margin-inline: auto;
+  }
+
+  .entry__title {
+    font-size: var(--text-subhead);
+    line-height: var(--lh-subhead);
+    letter-spacing: var(--track-subhead);
+    font-variation-settings: 'opsz' 72;
+    margin-bottom: var(--space-4);
+  }
+
+  /* Centred, because the alternative is not "left-aligned" — it is 528px of
+     dead paper down the right of every moment.
+
+     The media was sized for the old two-column entry (a 9rem date rail beside
+     the body). Collapsing that rail left the content at its original width
+     inside a full-width column, so each 544px frame sat flush left against half
+     an entry of nothing, 34 times over. A portrait clip cannot simply be
+     widened to fill it — at this column width it would render ~1900px tall.
+     Symmetric margins read as a decision; one 528px gutter reads as a mistake. */
+  .entry__media {
+    margin-block: var(--space-4);
+  }
+
+  /* The title centres with its media so each moment has ONE axis. A story,
+     when written, stays left-aligned inside a centred, readable measure —
+     centred body copy is measurably harder to read, and that should not become
+     a side effect of centring the picture. */
+  .entry__title {
+    text-align: center;
+  }
+
+  .entry__story {
+    max-width: var(--measure);
+    margin-inline: auto;
+  }
+
+  .entry__image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: var(--radius-photo);
+    box-shadow: var(--elev-photo);
+  }
+
+  .entry__story {
+    font-size: var(--text-body);
+    line-height: var(--lh-body);
+    color: var(--ink);
+    max-width: var(--measure);
+  }
+
+</style>

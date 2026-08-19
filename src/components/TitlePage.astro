@@ -1,0 +1,154 @@
+---
+import { isTodo } from '../lib/content';
+import { priorEditions } from '../lib/editions';
+
+interface Props {
+  greeting: string;
+  name: string;
+  subtitle: string;
+  year: number;
+}
+
+const { greeting, name, subtitle, year } = Astro.props;
+
+const prior = priorEditions(year);
+---
+
+{/*
+  A TITLE PAGE, not a hero.
+
+  DESIGN.md 3.5: "The hero. No float, no parallax, no ambient anything."
+  Last year this space was 900px containing three objects of near-equal weight
+  — a title, a stock subtitle, and a 600px video — so the brightest, largest
+  thing on load was a purple play button, and the H1 said "Bruce" while the nav
+  40px above it said "Bryan".
+
+  Burgundy appears exactly ONCE here, on the name. That is the whole hierarchy
+  rule: last year indigo marked the hero AND every section title AND the spine
+  AND all 14 dots, so it marked nothing.
+*/}
+<section class="title" id="top" aria-labelledby="title-h">
+  <div class="title__inner u-wrap">
+    {/*
+      The year was already sitting here as an ornament, so the back issues hang
+      off it rather than arriving as a new object competing with the greeting.
+      Reading order is preserved: the current year still comes first and stays
+      the only one at full emphasis, and it is a plain <span>, not a link to the
+      page you are already on.
+
+      A <nav> rather than a <p>: these are destinations. The visible text is
+      just "2025", so each link carries an aria-label naming what it opens.
+    */}
+    <nav class="title__editions" aria-label="Editions">
+      <span class="title__year u-micro" aria-current="page">{year}</span>
+      {
+        prior.map((e) => (
+          <>
+            <span class="title__editions-sep u-micro" aria-hidden="true">·</span>
+            <a class="title__prev u-micro" href={e.href} aria-label={`See the ${e.year} edition`}>
+              {e.year}
+            </a>
+          </>
+        ))
+      }
+    </nav>
+    <h1 class="title__h" id="title-h">
+      <span class="title__greeting">{greeting}</span>
+      <span class="title__name">{name}</span>
+    </h1>
+    {!isTodo(subtitle) && subtitle && <p class="title__sub">{subtitle}</p>}
+    <div class="title__rule" aria-hidden="true"></div>
+  </div>
+</section>
+
+<style>
+  .title {
+    padding-block: var(--section-gap-major) var(--section-gap);
+  }
+
+  .title__inner {
+    max-width: var(--wide-max);
+  }
+
+  .title__editions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-6);
+  }
+
+  /* Decorative and aria-hidden, so it is exempt from the text contrast floor —
+     but nothing else here leans on opacity for emphasis. */
+  .title__editions-sep {
+    color: var(--ink-muted);
+    opacity: 0.45;
+  }
+
+  /*
+    Same colour as the current year, NOT a dimmer one.
+    Measured: --ink-muted is 5.23:1 on paper, and dimming this to opacity 0.7
+    rendered it at 2.88:1 — below the 4.5:1 AA floor for 12px text, and dimmer
+    than --brass (2.96:1), which this project bans outright as a text colour.
+    The contrast gate compares token pairs, so it cannot see an opacity applied
+    on top and passed the build regardless.
+
+    So the affordance is the underline, not a reduction in contrast. Ordering
+    plus aria-current carries which edition you are on.
+  */
+  .title__prev {
+    color: var(--ink-muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--hairline);
+    transition:
+      color var(--dur-fast) var(--ease),
+      border-color var(--dur-fast) var(--ease);
+
+    /* Padding grows the tap target; the equal negative margin means it does so
+       without moving anything. AUDIT M3 territory — a 12px numeral is a 12px
+       target otherwise. */
+    padding: var(--space-3) var(--space-2);
+    margin: calc(var(--space-3) * -1) calc(var(--space-2) * -1);
+  }
+
+  .title__prev:hover,
+  .title__prev:focus-visible {
+    color: var(--burgundy);
+    border-bottom-color: currentColor;
+  }
+
+  .title__h {
+    margin: 0;
+    font-size: var(--text-display);
+    line-height: var(--lh-display);
+    letter-spacing: var(--track-display);
+    /* High optical size: Fraunces at opsz 144 has the weight and warmth the
+       brief asks for. At low opsz it is a text face. */
+    font-variation-settings: 'opsz' 144, 'SOFT' 0, 'WONK' 1;
+    font-weight: 600;
+    text-wrap: balance;
+  }
+
+  .title__greeting,
+  .title__name {
+    display: block;
+  }
+
+  .title__name {
+    color: var(--burgundy);
+  }
+
+  .title__sub {
+    margin-top: var(--space-8);
+    max-width: var(--measure-narrow);
+    font-size: var(--text-lead);
+    line-height: var(--lh-lead);
+    color: var(--ink-muted);
+  }
+
+  .title__rule {
+    margin-top: var(--space-16);
+    height: 1px;
+    background: var(--brass); /* ornament only — never text */
+    max-width: 8rem;
+  }
+</style>

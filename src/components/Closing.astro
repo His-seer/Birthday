@@ -1,0 +1,105 @@
+---
+interface Props {
+  name: string;
+  year: number;
+}
+
+const { name, year } = Astro.props;
+---
+
+{/*
+  THE SINGLE FLOURISH — DESIGN.md 3.5.
+
+  Replaces confetti AND the fireworks canvas AND the random --primary interval
+  with exactly one scripted moment: a burgundy rule that draws itself
+  left-to-right beneath the closing line, once per visit.
+
+  "One moment lands; four moments cancel out." It is made of the page's own
+  materials — no canvas, no library, no third-party script — which is what
+  makes it read as authored rather than installed.
+
+  Under prefers-reduced-motion the rule simply appears, already drawn.
+*/}
+<section class="closing" aria-label="Closing">
+  <div class="closing__inner u-wrap">
+    <div class="closing__rule" aria-hidden="true"><span></span></div>
+    <p class="closing__mark">
+      <span class="closing__name">{name}</span>
+      <span class="u-micro">{year}</span>
+    </p>
+  </div>
+</section>
+
+<style>
+  .closing {
+    padding-block: var(--section-gap-major);
+  }
+
+  .closing__inner {
+    max-width: var(--wide-max);
+  }
+
+  .closing__rule {
+    height: 1px;
+    background: var(--hairline);
+    overflow: hidden;
+  }
+
+  .closing__rule span {
+    display: block;
+    height: 100%;
+    width: 100%;
+    background: var(--burgundy);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform var(--dur-flourish) var(--ease);
+  }
+
+  .closing__rule.is-drawn span {
+    transform: scaleX(1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .closing__rule span {
+      transform: scaleX(1);
+    }
+  }
+
+  .closing__mark {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+  }
+
+  .closing__name {
+    font-family: var(--font-display);
+    font-size: var(--text-subhead);
+    font-variation-settings: 'opsz' 72, 'WONK' 1;
+    color: var(--ink);
+  }
+</style>
+
+<script>
+  const rule = document.querySelector<HTMLElement>('.closing__rule');
+  if (rule) {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      rule.classList.add('is-drawn');
+    } else if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+            entry.target.classList.add('is-drawn');
+            io.unobserve(entry.target);
+          }
+        },
+        { threshold: 0.6 }
+      );
+      io.observe(rule);
+    } else {
+      rule.classList.add('is-drawn');
+    }
+  }
+</script>

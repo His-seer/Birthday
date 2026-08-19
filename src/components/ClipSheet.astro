@@ -1,0 +1,96 @@
+---
+import { isTodo } from '../lib/content';
+import VideoCard from './VideoCard.astro';
+
+interface Props {
+  clips: { src: string; alt: string; aspect: string }[];
+}
+
+const { clips } = Astro.props;
+
+/* ONE uniform tile for every clip.
+   Thirty-four clips at their native aspects is a ragged wall — tried, and it
+   reads as noise. A single 4:5 frame turns them into a contact sheet, which is
+   the same device TimelineContactSheet already uses for the same reason.
+   The crop is honest here: it frames a POSTER, a still standing in for a film.
+   Playback is object-fit: contain, so nothing is cropped when actually watched. */
+const TILE = '4:5';
+
+/* Never let an unwritten alt reach the page.
+   Passing `clip.alt` straight through put alt="TODO-CONTENT" on 34 images and
+   into 68 aria-labels — silent to anyone looking at the screen, and announced
+   aloud to anyone using a screen reader. GalleryGrid already guards this way;
+   this did not, which is the whole argument for the fallback living in the
+   component rather than being remembered at each call site. */
+const label = (alt: string, i: number) => (isTodo(alt) ? `Clip ${i + 1}` : alt);
+---
+
+{
+  clips.length > 0 && (
+    <section class="clips" id="clips" aria-labelledby="clips-h">
+      <div class="clips__inner u-wrap">
+        <h2 class="clips__h reveal" id="clips-h">
+          Clips
+          <span class="clips__count u-micro">{clips.length}</span>
+        </h2>
+        <hr class="u-ornament clips__rule" />
+        <ul class="clips__grid" role="list">
+          {clips.map((clip, i) => (
+            <li class="clips__item reveal">
+              <VideoCard
+                src={clip.src}
+                alt={label(clip.alt, i)}
+                aspect={clip.aspect}
+                frameAspect={TILE}
+                expand
+                title={label(clip.alt, i)}
+                sizes="(max-width: 560px) 44vw, (max-width: 900px) 30vw, 200px"
+              />
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .clips {
+    padding-block: var(--section-gap);
+    background: var(--paper-sunk);
+  }
+
+  .clips__h {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    margin: 0;
+  }
+
+  .clips__count {
+    color: var(--ink-muted);
+  }
+
+  .clips__rule {
+    margin-block: var(--space-4) var(--space-8);
+  }
+
+  /* auto-fill, not auto-fit: a short final row keeps the tile size the rest of
+     the sheet uses instead of stretching two clips across the full width. */
+  .clips__grid {
+    display: grid;
+    /* 120px, not 150px. At a 375px viewport the content box is ~295px, so a
+       150px minimum could only fit ONE column — turning a contact sheet into a
+       34-item vertical scroll, which is the opposite of a sheet. 120px yields
+       two columns on a phone and scales up from there. */
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .clips__item {
+    margin: 0;
+  }
+</style>

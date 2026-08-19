@@ -1,0 +1,252 @@
+---
+interface Props {
+  logo: string;
+  links: Array<{ href: string; label: string }>;
+  /**
+   * Optional link to another edition, rendered after the section links and set
+   * apart from them.
+   *
+   * The section links are in-page anchors; this one leaves the page, so it is a
+   * separate prop rather than another entry in `links` — that keeps the
+   * "Sections" nav honestly about sections, and lets the styling say "this goes
+   * somewhere else" instead of implying a sixth section further down.
+   */
+  archive?: { href: string; label: string };
+}
+
+const { logo, links, archive } = Astro.props;
+---
+
+{/*
+  AUDIT H6 — last year the mobile menu did not work AT ALL.
+
+  main.css hid .nav-menu below 768px, main.js toggled a class "active", and
+  there was NO .nav-menu.active rule in any stylesheet — I enumerated every
+  rule matching nav-menu across all loaded sheets and got exactly [".nav-menu"].
+  Clicking the hamburger applied the class and the menu stayed display:none.
+  On mobile the site had no working navigation whatsoever, and the hamburger
+  was a 21x28 tap target.
+
+  This is a standard disclosure pattern: a real <button> with aria-expanded
+  and aria-controls, a panel that is actually revealed, Escape to close, and
+  focus returned to the trigger. Tap targets are >= 44x44.
+*/}
+<header class="nav">
+  <div class="nav__inner u-wrap">
+    <a class="nav__logo" href="#top">{logo}</a>
+
+    <button
+      class="nav__toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="nav-menu"
+      aria-label="Open menu"
+    >
+      <span class="nav__bars" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </span>
+    </button>
+
+    <nav id="nav-menu" class="nav__menu" aria-label="Sections">
+      <ul role="list">
+        {
+          links.map((link) => (
+            <li>
+              <a href={link.href}>{link.label}</a>
+            </li>
+          ))
+        }
+        {
+          archive && (
+            <li class="nav__archive">
+              <a href={archive.href}>{archive.label}</a>
+            </li>
+          )
+        }
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    min-height: 3.5rem;
+  }
+
+  .nav__logo {
+    font-family: var(--font-display);
+    font-size: var(--text-body-lg);
+    font-variation-settings: 'opsz' 48;
+    color: var(--ink);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+  }
+
+  .nav__toggle {
+    display: grid;
+    place-items: center;
+    /* AUDIT M3: was 21x28. WCAG 2.5.8 minimum is 24x24; 44x44 recommended. */
+    width: var(--tap-min);
+    height: var(--tap-min);
+    margin-right: calc(var(--space-2) * -1);
+    border-radius: var(--radius-surface);
+  }
+
+  .nav__bars {
+    display: grid;
+    gap: 5px;
+    width: 22px;
+  }
+
+  .nav__bars span {
+    display: block;
+    height: 2px;
+    background: var(--ink);
+    border-radius: 2px;
+    transition: transform var(--dur-mid) var(--ease), opacity var(--dur-mid) var(--ease);
+  }
+
+  .nav__toggle[aria-expanded='true'] .nav__bars span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .nav__toggle[aria-expanded='true'] .nav__bars span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .nav__toggle[aria-expanded='true'] .nav__bars span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  .nav__menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav__menu a {
+    display: flex;
+    align-items: center;
+    min-height: var(--tap-min);
+    color: var(--ink-muted);
+    text-decoration: none;
+    font-size: var(--text-caption);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: color var(--dur-fast) var(--ease);
+  }
+
+  .nav__menu a:hover {
+    color: var(--burgundy);
+  }
+
+  /* ---------------------------------------------------- mobile (< 48rem) */
+  @media (max-width: 47.999rem) {
+    .nav__menu {
+      position: absolute;
+      inset-inline: 0;
+      top: 100%;
+      background: var(--paper);
+      border-bottom: 1px solid var(--hairline);
+      box-shadow: var(--elev-photo);
+      /* Collapsed by default. Deliberately `display: none` rather than a
+         0fr->1fr grid transition: that trick depends on `fr` resolving
+         against an indefinite container height, and it did not resolve here,
+         leaving the panel permanently 1px tall.
+
+         This is the ONE thing AUDIT called completely broken (H6), so it gets
+         the least clever implementation available, not the most elegant. The
+         panel either displays or it does not, and the test below asserts it. */
+      display: none;
+    }
+
+    /* THIS is the rule whose absence broke the whole thing last year: main.js
+       toggled a class and no matching rule existed in any stylesheet. */
+    .nav__menu.is-open {
+      display: block;
+    }
+
+    .nav__menu ul {
+      padding-inline: var(--gutter);
+    }
+
+    .nav__menu li + li {
+      border-top: 1px solid var(--hairline);
+    }
+  }
+
+  /* ---------------------------------------------------- desktop (>= 48rem) */
+  @media (min-width: 48rem) {
+    .nav__toggle {
+      display: none;
+    }
+
+    .nav__menu ul {
+      display: flex;
+      gap: var(--space-8);
+    }
+
+    /* A hairline before the edition link so it reads as a separate
+       destination rather than the last section on this page. */
+    .nav__archive {
+      margin-inline-start: calc(var(--space-8) - var(--space-4));
+      padding-inline-start: var(--space-4);
+      border-inline-start: 1px solid var(--hairline);
+    }
+  }
+</style>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.nav__toggle');
+  const menu = document.querySelector<HTMLElement>('.nav__menu');
+
+  if (toggle && menu) {
+    const setOpen = (open: boolean) => {
+      menu.classList.toggle('is-open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    };
+
+    toggle.addEventListener('click', () => {
+      setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+    });
+
+    // Following a link closes the panel.
+    menu.addEventListener('click', (event) => {
+      if ((event.target as HTMLElement).closest('a')) setOpen(false);
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape') return;
+      if (toggle.getAttribute('aria-expanded') !== 'true') return;
+      setOpen(false);
+      toggle.focus();
+    });
+
+    // Reset state when crossing the breakpoint, so a menu left open on mobile
+    // does not leave aria-expanded="true" on a hidden button at desktop width.
+    matchMedia('(min-width: 48rem)').addEventListener('change', (e) => {
+      if (e.matches) setOpen(false);
+    });
+  }
+
+  // NOTE: there is deliberately no global keyboard handling here.
+  // AUDIT M1: last year `document` captured ArrowLeft/ArrowRight and always
+  // moved the carousel — even when it was off-screen and even while focus was
+  // in a text field — and Space called preventDefault() to launch a
+  // celebration, breaking page scroll, one of the most common keyboard
+  // interactions on the web.
+</script>

@@ -1,0 +1,115 @@
+---
+import '../styles/global.css';
+import { orElse } from '../lib/content';
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  fallbackTitle: string;
+  /** Theme hook. The /2025/ archive sets "y2025" to switch the whole page into
+   *  last year's visual language without affecting the 2026 page. */
+  bodyClass?: string;
+}
+
+const { title, description, ogImage, fallbackTitle, bodyClass } = Astro.props;
+
+const resolvedTitle = orElse(title, fallbackTitle);
+const resolvedDescription = orElse(description, fallbackTitle);
+const ogUrl = ogImage ? new URL(`/og/${ogImage.replace(/^og\//, '')}.png`, Astro.site) : undefined;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{resolvedTitle}</title>
+    <meta name="description" content={resolvedDescription} />
+    <link rel="canonical" href={canonical} />
+
+    {/* PRIVACY: the site is for one person and is never publicly shared.
+        No sitemap.xml exists and it must never be submitted for indexing.
+        Last year's site is public AND indexable AND publicly writable. */}
+    <meta name="robots" content="noindex, nofollow, noarchive, noimageindex" />
+
+    {/* AUDIT M8: last year had zero meta beyond charset/viewport and no
+        favicon, so the WhatsApp/iMessage preview — the entire distribution
+        model for a gift link — rendered blank. The OG image is a typographic
+        title card, deliberately NOT a personal photo. */}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={resolvedTitle} />
+    <meta property="og:description" content={resolvedDescription} />
+    <meta property="og:url" content={canonical} />
+    {ogUrl && <meta property="og:image" content={ogUrl} />}
+    {ogUrl && <meta property="og:image:width" content="1200" />}
+    {ogUrl && <meta property="og:image:height" content="630" />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={resolvedTitle} />
+    <meta name="twitter:description" content={resolvedDescription} />
+    {ogUrl && <meta name="twitter:image" content={ogUrl} />}
+
+    <meta name="theme-color" content="#6E1A2B" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    {/* Sets .js before first paint so the reveal system never flashes
+        unstyled. Kept inline and tiny deliberately — this is the only
+        render-blocking script on the page. */}
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+
+  <body class={bodyClass}>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <slot name="header" />
+    <main id="main">
+      <slot />
+    </main>
+    <slot name="footer" />
+
+    <script>
+      // Scroll reveal — AUDIT M4 restored properly rather than left broken.
+      // Fires once per element, never re-hides, and is skipped entirely under
+      // reduced motion so nothing is ever stuck invisible.
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+      function revealAll() {
+        for (const el of document.querySelectorAll('.reveal')) {
+          el.classList.add('is-visible');
+        }
+      }
+
+      if (reduce.matches || !('IntersectionObserver' in window)) {
+        revealAll();
+      } else {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              entry.target.classList.add('is-visible');
+              io.unobserve(entry.target);
+            }
+          },
+          { rootMargin: '0px 0px -10% 0px', threshold: 0.05 }
+        );
+        for (const el of document.querySelectorAll('.reveal')) io.observe(el);
+
+        // Safety net: anything still hidden after load gets shown. Last year a
+        // reveal bug left content permanently invisible and was "fixed" with an
+        // !important override that killed the whole system.
+        window.addEventListener('load', () => {
+          setTimeout(() => {
+            for (const el of document.querySelectorAll('.reveal:not(.is-visible)')) {
+              const box = el.getBoundingClientRect();
+              if (box.top < window.innerHeight) el.classList.add('is-visible');
+            }
+          }, 300);
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,276 @@
+---
+import { Picture } from 'astro:assets';
+import VideoCard from './VideoCard.astro';
+import { isTodo } from '../lib/content';
+
+interface Props {
+  years: Array<{ year: number; label: string; events: any[] }>;
+}
+
+const { years } = Astro.props;
+
+const sorted = [...years].sort((a, b) => b.year - a.year);
+const totalEvents = sorted.reduce((n, y) => n + y.events.length, 0);
+
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/timeline/**/*.jpg', {
+  eager: true,
+});
+
+/** Uniform display tile. The files keep their real aspect; only the frame is
+ *  regularised. DESIGN.md 2.6's complaint was three unreconciled ratios in one
+ *  rail swinging card heights by 2.4x between adjacent rows — a contact sheet's
+ *  entire value is that it does not do that. */
+const TILE = '4:5';
+const [tw, th] = TILE.split(':').map(Number);
+
+---
+
+{/*
+  DIRECTION A — "The Contact Sheet".
+
+  Each year is a chapter; within it, moments are a grid of uniform cards. Reads
+  as an album, which is honest about what the content actually is: DESIGN.md's
+  core charge was that last year's rail was "a structure pretending to be
+  content" — a spine, dots and alternation signalling a curated chronology, over
+  what is really a camera roll.
+
+  Trade against Direction B: shortest possible section and zero wasted
+  horizontal space, but adjacency reads as peers rather than as a sequence, so
+  the chronological *feeling* is weaker.
+
+  Growth: year N adds one collapsed chapter. At 60+ moments you see one open
+  year and five one-line chapter heads.
+*/}
+<div class="sheet">
+  <nav class="sheet__years" aria-label="Jump to year">
+    <ul role="list">
+      {sorted.map((y) => <li><a href={`#year-${y.year}`}>{y.year}</a></li>)}
+    </ul>
+  </nav>
+
+  {
+    sorted.map((y, i) => {
+      const isCurrent = i === 0;
+      const heading = isTodo(y.label) ? String(y.year) : y.label;
+
+      const grid = (
+        <ul class="sheet__grid" role="list">
+          {y.events.map((event) => {
+            const image =
+              event.media.kind === 'image'
+                ? images[`/src/assets/${event.media.src}.jpg`]?.default
+                : undefined;
+
+            return (
+              <li class="card reveal" id={event.id}>
+                <div class="card__frame">
+                  {event.media.kind === 'video' && (
+                    <VideoCard
+                      src={event.media.src}
+                      alt={isTodo(event.media.alt) ? event.title : event.media.alt}
+                      aspect={event.media.aspect}
+                      frameAspect={TILE}
+                      title={event.title}
+                      sizes="(max-width: 40rem) 92vw, (max-width: 64rem) 45vw, 22rem"
+                    />
+                  )}
+
+                  {event.media.kind === 'image' && image && (
+                    <Picture
+                      src={image}
+                      formats={['avif']}
+                      fallbackFormat="webp"
+                      widths={[320, 480, 720]}
+                      sizes="(max-width: 40rem) 92vw, (max-width: 64rem) 45vw, 22rem"
+                      alt={isTodo(event.media.alt) ? event.title : event.media.alt}
+                      loading="lazy"
+                      decoding="async"
+                      style={`aspect-ratio: ${tw} / ${th};`}
+                      class="card__image"
+                    />
+                  )}
+
+                  {event.media.kind === 'none' && <div class="card__blank" aria-hidden="true" />}
+                </div>
+
+                <h4 class="card__title">{event.title}</h4>
+                {!isTodo(event.story) && event.story && (
+                  <p class="card__story">{event.story}</p>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      );
+
+      return isCurrent ? (
+        <section class="sheet__year" id={`year-${y.year}`} aria-labelledby={`year-${y.year}-h`}>
+          <h3 class="sheet__head" id={`year-${y.year}-h`}>
+            {heading}
+            <span class="sheet__count u-micro">{y.events.length} moments</span>
+          </h3>
+          {grid}
+        </section>
+      ) : (
+        <details class="sheet__year sheet__year--past" id={`year-${y.year}`}>
+          <summary class="sheet__head">
+            {heading}
+            <span class="sheet__count u-micro">{y.events.length} moments</span>
+          </summary>
+          {grid}
+        </details>
+      );
+    })
+  }
+
+  <p class="sheet__total u-micro">
+    {totalEvents} moments, {sorted.length} {sorted.length === 1 ? 'year' : 'years'}
+  </p>
+</div>
+
+<style>
+  .sheet__years ul {
+    list-style: none;
+    margin: 0 0 var(--space-8);
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .sheet__years a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap-min);
+    padding-inline: var(--space-4);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-surface);
+    color: var(--ink-muted);
+    text-decoration: none;
+    font-size: var(--text-caption);
+    letter-spacing: 0.06em;
+  }
+
+  .sheet__years a:hover {
+    color: var(--burgundy);
+    border-color: var(--burgundy);
+  }
+
+  .sheet__head {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin: 0 0 var(--space-8);
+    padding-block: var(--space-4);
+    background: var(--paper-sunk);
+    border-bottom: 1px solid var(--burgundy);
+    font-family: var(--font-display);
+    font-size: var(--text-heading);
+    line-height: var(--lh-heading);
+    letter-spacing: var(--track-heading);
+    font-variation-settings: 'opsz' 96;
+    scroll-margin-top: var(--space-16);
+  }
+
+  .sheet__count {
+    flex: none;
+    font-family: var(--font-text);
+  }
+
+  .sheet__year--past > summary {
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .sheet__year--past > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .sheet__year--past > summary::after {
+    content: '';
+    flex: none;
+    width: 0.6em;
+    height: 0.6em;
+    margin-left: var(--space-2);
+    border-right: 2px solid var(--burgundy);
+    border-bottom: 2px solid var(--burgundy);
+    transform: rotate(45deg) translateY(-0.15em);
+  }
+
+  .sheet__year--past[open] > summary::after {
+    transform: rotate(-135deg) translateY(-0.15em);
+  }
+
+  .sheet__year--past > summary:focus-visible {
+    outline: 2px solid var(--burgundy);
+    outline-offset: 3px;
+  }
+
+  /* The grid. Uniform tiles, so there is no 2.4x height swing between
+     neighbours and no ~50%-empty row. Fluid at every width via auto-fill, so
+     834px needs no special case. */
+  .sheet__grid {
+    list-style: none;
+    margin: 0 0 var(--space-12);
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    gap: var(--space-8) var(--space-6);
+  }
+
+  .card {
+    display: grid;
+    gap: var(--space-2);
+    align-content: start;
+    scroll-margin-top: var(--space-16);
+  }
+
+  .card__frame {
+    border-radius: var(--radius-photo);
+    overflow: hidden;
+  }
+
+  .card__image {
+    width: 100%;
+    height: 100%;
+    /* Display crop only. The stored file keeps its full frame — this is not
+       AUDIT H3, which permanently destroyed the pixels on upload. Top-biased
+       so faces survive the crop on portrait phone shots. */
+    object-fit: cover;
+    object-position: center 30%;
+    box-shadow: var(--elev-photo);
+    border-radius: var(--radius-photo);
+  }
+
+  .card__blank {
+    aspect-ratio: 4 / 5;
+    background: var(--paper);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-photo);
+  }
+
+
+  .card__title {
+    font-size: var(--text-body-lg);
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    font-variation-settings: 'opsz' 48;
+  }
+
+  .card__story {
+    font-size: var(--text-caption);
+    line-height: var(--lh-caption);
+    color: var(--ink-muted);
+  }
+
+
+  .sheet__total {
+    margin-top: var(--space-8);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--hairline);
+  }
+</style>

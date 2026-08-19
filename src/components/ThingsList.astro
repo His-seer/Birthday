@@ -1,0 +1,154 @@
+---
+import { isTodo, itemsTitle, orElse } from '../lib/content';
+import { getVideo } from '../lib/media';
+import VideoCard from './VideoCard.astro';
+
+interface Props {
+  items: {
+    titleTemplate: string;
+    titleName: string;
+    entries: string[];
+    video?: string;
+    videoAlt?: string;
+  };
+}
+
+const { items } = Astro.props;
+
+/* The heading count still comes from entries.length, EVEN WHEN A FILM CARRIES
+   THE LIST. That is deliberate: the film is twenty-four things, so the array
+   stays twenty-four long and the count stays honest. Filtering the array to
+   drop placeholders would retitle the section "0 Things I love about Bruce" —
+   which is precisely the 2025 bug this template exists to prevent, arrived at
+   from the opposite direction. */
+const heading = itemsTitle(items);
+
+// Only the placeholder <li>s are suppressed. Real entries still render, so the
+// list and the film can coexist if some are written later.
+const spoken = Boolean(items.video);
+const visibleEntries = items.entries
+  .map((entry, i) => ({ entry, n: i + 1 }))
+  .filter(({ entry }) => !isTodo(entry));
+
+const clip = items.video ? getVideo(items.video) : null;
+const clipAspect = clip ? `${clip.width}:${clip.height}` : null;
+---
+
+{/*
+  The heading count is DERIVED from entries.length, never hardcoded.
+
+  The brief locks this verbatim as "24 Things I love about Bruce" and
+  separately forbids hardcoding the count. Both are satisfied by a template:
+  at 24 entries this renders that exact string, and at any other count it stays
+  truthful instead of repeating last year's site, which titled itself "23" over
+  non-matching content.
+
+  Note this heading intentionally uses "Bruce" while the title page uses
+  "My Ish". That variety is deliberate this year, not the accidental
+  Bryan/Bruce/Brucey mismatch AUDIT H1 traced to hardcoded HTML.
+*/}
+<section class="things" id="things" aria-labelledby="things-h">
+  <div class="things__inner u-wrap">
+    <h2 class:list={['things__h', 'reveal', spoken && 'things__h--centred']} id="things-h">
+      {heading}
+    </h2>
+
+    {
+      items.video && clipAspect && (
+        <div class="things__film">
+          <VideoCard
+            src={items.video}
+            alt={orElse(items.videoAlt ?? '', heading)}
+            aspect={clipAspect}
+            title={heading}
+            sizes="(max-width: 620px) 88vw, 380px"
+            expand
+          />
+        </div>
+      )
+    }
+
+    <ol class="things__list">
+      {
+        visibleEntries.map(({ entry, n }) => (
+          <li class="things__item reveal">
+            <span class="things__n u-micro">{String(n).padStart(2, '0')}</span>
+            <span class="things__text">{entry}</span>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  /* Centred and narrow: the film is portrait, and at full measure it would be
+     taller than the viewport. */
+  .things__film {
+    /* --space-8: there is no --space-7, and the undefined var() was
+       invalidating the shorthand and dropping the `auto`. */
+    margin: var(--space-8) auto 0;
+    max-width: 380px;
+  }
+
+  .things__h--centred {
+    text-align: center;
+  }
+
+  .things {
+    padding-block: var(--section-gap);
+  }
+
+  .things__h {
+    /* Burgundy, matching the name on the title page.
+
+       TitlePage states the rule: "Burgundy appears exactly ONCE here, on the
+       name... last year indigo marked the hero AND every section title AND the
+       spine AND all 14 dots, so it marked nothing." This takes the count from
+       one to three, so it is worth being precise about why these two and no
+       others: the letter and the things-list are the sections where she is
+       addressed directly. Photographs, Clips and The journey stay in ink.
+       Extend it to those and the accent stops meaning anything, exactly as the
+       indigo did. */
+    color: var(--burgundy);
+    font-size: var(--text-title);
+    line-height: var(--lh-title);
+    letter-spacing: var(--track-title);
+    font-variation-settings: 'opsz' 96;
+    max-width: var(--measure);
+    margin-bottom: var(--space-12);
+  }
+
+  .things__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0;
+    max-width: var(--wide-max);
+  }
+
+  @media (min-width: 56rem) {
+    .things__list {
+      grid-template-columns: repeat(2, 1fr);
+      column-gap: var(--space-16);
+    }
+  }
+
+  .things__item {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    gap: var(--space-4);
+    align-items: baseline;
+    padding-block: var(--space-4);
+    border-top: 1px solid var(--hairline);
+    font-size: var(--text-body);
+    line-height: var(--lh-body);
+  }
+
+  .things__n {
+    color: var(--burgundy);
+    font-variant-numeric: tabular-nums;
+  }
+
+</style>

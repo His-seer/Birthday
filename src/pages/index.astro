@@ -1,0 +1,142 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import TitlePage from '../components/TitlePage.astro';
+import Letter from '../components/Letter.astro';
+import ThingsList from '../components/ThingsList.astro';
+import GalleryGrid from '../components/GalleryGrid.astro';
+import ClipSheet from '../components/ClipSheet.astro';
+import Timeline from '../components/Timeline.astro';
+import TimelineContactSheet from '../components/TimelineContactSheet.astro';
+import Closing from '../components/Closing.astro';
+import YearSwitch from '../components/YearSwitch.astro';
+import { getYear, getTimeline, heroTitle } from '../lib/content';
+
+const YEAR = 2026;
+
+/**
+ * Which timeline design is live.
+ *   'B' — The Spine, Rebuilt   single-column rail, sticky year markers
+ *   'A' — The Contact Sheet    year chapters, uniform grid tiles
+ * Compare both at /timeline-a, then change this one letter.
+ */
+const TIMELINE_DIRECTION: 'A' | 'B' = 'B';
+
+const year = await getYear(YEAR);
+const timeline = await getTimeline();
+
+// Every name-bearing surface reads from data. No name appears in any template.
+// AUDIT H1/N4: last year the name was hardcoded in four places and disagreed
+// with itself in two of them ("Bryan" in title and logo, "Bruce" in the hero,
+// "Brucey" in the message) because the admin panel silently dropped `messages`
+// and someone edited the HTML by hand.
+const hero = heroTitle(year.hero, year.names);
+
+const links = [
+  { href: '#letter', label: 'Letter' },
+  { href: '#things', label: 'Things' },
+  { href: '#gallery', label: 'Photographs' },
+  { href: '#clips', label: 'Clips' },
+  { href: '#timeline', label: 'Journey' },
+];
+---
+
+<Layout
+  title={year.meta.title}
+  description={year.meta.description}
+  ogImage={year.meta.ogImage}
+  fallbackTitle={hero}
+>
+  {/* The footer YearSwitch stays the proper ending — you finish this year, then
+      you are offered last year. But it was the ONLY way through, and this page
+      is a letter, 24 things, 22 photographs, 34 clips and 19 moments deep, so
+      reaching it meant scrolling past all of it. Every other destination has a
+      persistent link in the sticky nav; the archive should too. */}
+  <Nav slot="header" logo={hero} links={links} archive={{ href: '/2025/', label: '2025' }} />
+
+  <TitlePage
+    greeting={year.hero.greeting}
+    name={year.names.primary}
+    subtitle={year.hero.subtitle}
+    year={YEAR}
+  />
+
+  {/* The letter comes SECOND, not last. It is the reason the site exists. */}
+  <Letter
+    title={year.message.title}
+    paragraphs={year.message.paragraphs}
+    closing={year.message.closing}
+    signature={year.message.signature}
+    video={year.message.video}
+    videoAlt={year.message.videoAlt}
+  />
+
+  <ThingsList items={year.items} />
+
+  <section class="section" id="gallery" aria-labelledby="gallery-h">
+    <div class="u-wrap">
+      <h2 class="section__h reveal" id="gallery-h">Photographs</h2>
+      <GalleryGrid items={year.gallery} />
+    </div>
+  </section>
+
+  {/* Its OWN section, sibling to Photographs — not nested inside it.
+      ClipSheet carries its own <h2>, aria-labelledby and full-bleed sunk band;
+      inside the gallery those were a heading within a heading, a wrap within a
+      wrap, and a background that could not reach the page edges. */}
+  <ClipSheet clips={year.clips} />
+
+  <section class="section section--sunk" id="timeline" aria-labelledby="timeline-h">
+    <div class="u-wrap">
+      <h2 class="section__h reveal" id="timeline-h">The journey</h2>
+      {
+        TIMELINE_DIRECTION === 'A' ? (
+          <TimelineContactSheet years={timeline} />
+        ) : (
+          <Timeline years={timeline} />
+        )
+      }
+    </div>
+  </section>
+
+  <Closing name={year.names.primary} year={YEAR} />
+
+  <footer slot="footer" class="foot">
+    <div class="u-wrap foot__inner">
+      <p class="u-micro">Made for you · {YEAR}</p>
+      <YearSwitch current={2026} />
+    </div>
+  </footer>
+</Layout>
+
+<style>
+  .section {
+    padding-block: var(--section-gap);
+  }
+
+  .section--sunk {
+    background: var(--paper-sunk);
+  }
+
+  .section__h {
+    font-size: var(--text-title);
+    line-height: var(--lh-title);
+    letter-spacing: var(--track-title);
+    font-variation-settings: 'opsz' 96;
+    margin-bottom: var(--space-12);
+    scroll-margin-top: var(--space-16);
+  }
+
+  .foot {
+    padding-block: var(--space-12);
+    border-top: 1px solid var(--hairline);
+  }
+
+  .foot__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-6);
+  }
+</style>
