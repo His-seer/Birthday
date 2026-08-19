@@ -10,11 +10,26 @@ const { clips } = Astro.props;
 
 /* ONE uniform tile for every clip.
    Thirty-four clips at their native aspects is a ragged wall — tried, and it
-   reads as noise. A single 4:5 frame turns them into a contact sheet, which is
-   the same device TimelineContactSheet already uses for the same reason.
-   The crop is honest here: it frames a POSTER, a still standing in for a film.
-   Playback is object-fit: contain, so nothing is cropped when actually watched. */
-const TILE = '4:5';
+   reads as noise. A single frame turns them into a contact sheet, which is the
+   same device TimelineContactSheet already uses for the same reason.
+
+   9:16, not the 4:5 this started as. Two reasons, and the first is the real one:
+   THIRTY-ONE OF THE THIRTY-FOUR CLIPS ARE ALREADY 9:16. They are phone videos.
+   A 4:5 frame was cropping the top and bottom off almost every clip on the page
+   to impose a shape none of them had — the uniformity was real, but it was
+   bought by cutting the content rather than by choosing its own proportion.
+   At 9:16 the frame IS the source, so 31 of 34 posters are now uncropped and
+   the sheet is still perfectly uniform.
+
+   Second, it fixes the complaint that sent me here. At 296x370 the clips read
+   as the lesser section beside a photo rail whose plates run 454px wide and
+   whose tallest portraits reach 642px. 296x526 sits inside that range instead
+   of below it.
+
+   The cost, stated: the ONE 16:9 landscape clip crops hard. It was already
+   cropping at 4:5; this makes it worse. One clip out of thirty-four is the
+   right thing to trade for thirty-one uncropped ones. */
+const TILE = '9:16';
 
 /* Never let an unwritten alt reach the page.
    Passing `clip.alt` straight through put alt="TODO-CONTENT" on 34 images and
