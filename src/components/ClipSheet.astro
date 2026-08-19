@@ -55,7 +55,7 @@ const label = (alt: string, i: number) => (isTodo(alt) ? `Clip ${i + 1}` : alt);
                   frameAspect={TILE}
                   expand
                   title={label(clip.alt, i)}
-                  sizes="(max-width: 640px) 40vw, (max-width: 1024px) 22vw, 200px"
+                  sizes="(max-width: 640px) 62vw, (max-width: 1024px) 38vw, 340px"
                 />
               </li>
             ))}
@@ -132,24 +132,31 @@ const label = (alt: string, i: number) => (isTodo(alt) ? `Clip ${i + 1}` : alt);
     outline-offset: 4px;
   }
 
-  /* 40%, so a 375px viewport still shows ~2.5 tiles at ~118px — the same tile
-     size the old `minmax(120px, 1fr)` grid produced. The half-tile is the cue
-     that the rail continues; a whole number of tiles would look like the end. */
+  /* THREE per view on desktop, not six.
+     The first pass carried the old grid's ~120px tile straight into the rail,
+     which put 6.5 clips on screen at ~166px each. That is a thumbnail, and a
+     thumbnail is the wrong size for something whose whole job is to make you
+     want to press play — you cannot read a face at 166px. 30% gives ~3.3
+     visible at 1072px (~320px per tile), and the fractional tile is still the
+     cue that the rail continues.
+
+     The cost, stated: 34 clips at 3-up is ~11 swipes rather than ~5. That is
+     the trade for tiles you can actually see. */
   .clips__item {
     margin: 0;
-    flex: 0 0 40%;
+    flex: 0 0 62%;
     scroll-snap-align: center;
   }
 
   @media (min-width: 40rem) {
     .clips__item {
-      flex-basis: 22%;
+      flex-basis: 38%;
     }
   }
 
   @media (min-width: 64rem) {
     .clips__item {
-      flex-basis: 15.5%;
+      flex-basis: 30%;
     }
   }
 
@@ -175,11 +182,6 @@ const label = (alt: string, i: number) => (isTodo(alt) ? `Clip ${i + 1}` : alt);
 
   .rail__nav--next {
     right: calc(var(--space-4) * -1);
-  }
-
-  .rail__nav[disabled] {
-    opacity: 0;
-    pointer-events: none;
   }
 
   @media (hover: hover) and (pointer: fine) {

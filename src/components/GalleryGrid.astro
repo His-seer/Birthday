@@ -141,7 +141,24 @@ const resolved = items.map((item, i) => {
       <path d="M6 6l12 12M18 6L6 18" stroke-linecap="round" />
     </svg>
   </button>
+  {/* Opening a photograph used to be a dead end: view, close, find your place
+      in the rail, open the next. These make the full view its own rail —
+      swipe, arrow keys, or these buttons. They wrap, same as the rail arrows,
+      so there is no dead end at either edge either. */}
+  <button class="lightbox__nav lightbox__nav--prev" type="button" aria-label="Previous photograph">
+    <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+      <path d="M15 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </button>
+  <button class="lightbox__nav lightbox__nav--next" type="button" aria-label="Next photograph">
+    <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+      <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </button>
   <div class="lightbox__stage"></div>
+  {/* Announces the new photograph when it changes. Without this the buttons
+      are silent to a screen reader — the picture swaps and nothing is said. */}
+  <p class="lightbox__status u-visually-hidden" role="status" aria-live="polite"></p>
 </dialog>
 
 <div class="gallery__sources" hidden>
@@ -263,11 +280,6 @@ const resolved = items.map((item, i) => {
     right: calc(var(--space-4) * -1);
   }
 
-  .rail__nav[disabled] {
-    opacity: 0;
-    pointer-events: none;
-  }
-
   /* Pointer-only. On touch the swipe IS the control, and these would just sit
      on top of the photographs — which is exactly what AUDIT M3 called out. */
   @media (hover: hover) and (pointer: fine) {
@@ -353,6 +365,41 @@ const resolved = items.map((item, i) => {
     border-radius: var(--radius-photo);
   }
 
+  .lightbox__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: var(--tap-min);
+    height: var(--tap-min);
+    border-radius: 50%;
+    background: var(--paper);
+    color: var(--ink);
+    box-shadow: var(--elev-photo);
+    cursor: pointer;
+  }
+
+  .lightbox__nav--prev {
+    left: var(--space-2);
+  }
+
+  .lightbox__nav--next {
+    right: var(--space-2);
+  }
+
+  .lightbox__nav:focus-visible {
+    outline: 2px solid var(--burgundy);
+    outline-offset: 3px;
+  }
+
+  /* A single photograph has nowhere to go, so the controls would be furniture
+     that does nothing. Set by the script when the gallery has one item. */
+  .lightbox--single .lightbox__nav {
+    display: none;
+  }
+
   .lightbox__close {
     position: absolute;
     top: var(--space-2);
@@ -380,40 +427,103 @@ const resolved = items.map((item, i) => {
   const sources = document.querySelector<HTMLElement>('.gallery__sources');
 
   if (dialog && stage && sources) {
-    document.querySelectorAll<HTMLButtonElement>('[data-lightbox]').forEach((button) => {
+    const triggers = [...document.querySelectorAll<HTMLButtonElement>('[data-lightbox]')];
+    const status = dialog.querySelector<HTMLElement>('.lightbox__status');
+    const total = triggers.length;
+    let current = 0;
+
+    if (total < 2) dialog.classList.add('lightbox--single');
+
+    function show(index: number) {
+      // Wrap both ways, matching the rail arrows — no dead end at either edge.
+      current = (index + total) % total;
+
+      const source = sources!.querySelector<HTMLElement>(`[data-full="${current}"]`);
+      if (!source) return;
+
+      const clone = source.cloneNode(true) as HTMLElement;
+      clone.removeAttribute('hidden');
+
+      /* `data-full` is forwarded by <Picture> onto the <img> ITSELF, not onto
+         a wrapping <picture>. So `source` is already the image, and the old
+         `clone.querySelector('img')` returned null — which silently skipped
+         the whole block below it. Result: every lightbox image opened with
+         alt="" (the full-view photo was anonymous to a screen reader) and
+         kept loading="lazy" instead of being upgraded to eager.
+         Handle both shapes rather than assuming either. */
+      const img = clone instanceof HTMLImageElement ? clone : clone.querySelector('img');
+      const label = triggers[current]?.querySelector('img')?.getAttribute('alt') ?? '';
+      if (img) {
+        img.setAttribute('alt', label);
+        img.setAttribute('loading', 'eager');
+      }
+
+      stage!.replaceChildren(clone);
+      if (status) status.textContent = `${label} — ${current + 1} of ${total}`;
+    }
+
+    triggers.forEach((button, i) => {
       button.addEventListener('click', () => {
-        const index = button.dataset.lightbox;
-        const source = sources.querySelector<HTMLElement>(`[data-full="${index}"]`);
-        if (!source) return;
-
-        const clone = source.cloneNode(true) as HTMLElement;
-        clone.removeAttribute('hidden');
-
-        /* `data-full` is forwarded by <Picture> onto the <img> ITSELF, not onto
-           a wrapping <picture>. So `source` is already the image, and the old
-           `clone.querySelector('img')` returned null — which silently skipped
-           the whole block below it. Result: every lightbox image opened with
-           alt="" (the full-view photo was anonymous to a screen reader) and
-           kept loading="lazy" instead of being upgraded to eager.
-           Handle both shapes rather than assuming either. */
-        const img = clone instanceof HTMLImageElement ? clone : clone.querySelector('img');
-        const trigger = button.querySelector('img');
-        if (img && trigger) {
-          img.setAttribute('alt', trigger.getAttribute('alt') ?? '');
-          img.setAttribute('loading', 'eager');
-        }
-        stage.replaceChildren(clone);
-        dialog.showModal();
+        show(i);
+        dialog!.showModal();
       });
     });
 
+    dialog.querySelector('.lightbox__nav--prev')?.addEventListener('click', () => show(current - 1));
+    dialog.querySelector('.lightbox__nav--next')?.addEventListener('click', () => show(current + 1));
+
+    /* Escape and Tab are the dialog's own; only the arrows are ours. Scoped to
+       the dialog, not to document — AUDIT M2 found last year binding
+       ArrowLeft/ArrowRight on document, so they drove the carousel even while
+       it was off-screen and even while focus sat in a text field. */
+    dialog.addEventListener('keydown', (event) => {
+      if (total < 2) return;
+      if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        show(current - 1);
+      } else if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        show(current + 1);
+      }
+    });
+
+    /* Touch swipe. Horizontal intent only: a mostly-vertical drag is a scroll
+       or a pull-to-refresh, and stealing it would make the photo feel stuck.
+       48px threshold so a slightly-diagonal tap never counts as a swipe. */
+    let startX = 0;
+    let startY = 0;
+    dialog.addEventListener(
+      'touchstart',
+      (event) => {
+        startX = event.changedTouches[0].clientX;
+        startY = event.changedTouches[0].clientY;
+      },
+      { passive: true }
+    );
+
+    dialog.addEventListener(
+      'touchend',
+      (event) => {
+        if (total < 2) return;
+        const dx = event.changedTouches[0].clientX - startX;
+        const dy = event.changedTouches[0].clientY - startY;
+        if (Math.abs(dx) < 48 || Math.abs(dx) <= Math.abs(dy)) return;
+        show(dx < 0 ? current + 1 : current - 1);
+      },
+      { passive: true }
+    );
+
     dialog.querySelector('.lightbox__close')?.addEventListener('click', () => dialog.close());
 
-    // Click the backdrop to dismiss.
+    // Click the backdrop to dismiss. The stage and the nav buttons sit above
+    // it, so this only fires on the surrounding dialog box itself.
     dialog.addEventListener('click', (event) => {
       if (event.target === dialog) dialog.close();
     });
 
-    dialog.addEventListener('close', () => stage.replaceChildren());
+    dialog.addEventListener('close', () => {
+      stage.replaceChildren();
+      if (status) status.textContent = '';
+    });
   }
 </script>
