@@ -24,7 +24,7 @@ const timeline = await getTimeline();
   <div class="pv">
     <div class="u-wrap">
       <p class="u-micro">Preview · not part of the site</p>
-      <h1 class="pv__h">Direction A — The Contact Sheet</h1>
+      <h1 class="pv__h u-title">Direction A — The Contact Sheet</h1>
       <p class="pv__note">
         Year chapters, uniform grid tiles. Compare with <a href="/">Direction B</a>, which is
         currently live on the real page.
@@ -40,7 +40,7 @@ const timeline = await getTimeline();
 
   <div class="pv pv--b">
     <div class="u-wrap">
-      <h2 class="pv__h">Direction B — The Spine, Rebuilt</h2>
+      <h2 class="pv__h u-title">Direction B — The Spine, Rebuilt</h2>
       <p class="pv__note">Single-column rail, sticky year markers. Currently live.</p>
     </div>
   </div>
@@ -63,10 +63,6 @@ const timeline = await getTimeline();
   }
 
   .pv__h {
-    font-size: var(--text-title);
-    line-height: var(--lh-title);
-    letter-spacing: var(--track-title);
-    font-variation-settings: 'opsz' 96;
     margin-block: var(--space-2) var(--space-4);
   }
 

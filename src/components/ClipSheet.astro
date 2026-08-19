@@ -29,7 +29,7 @@ const label = (alt: string, i: number) => (isTodo(alt) ? `Clip ${i + 1}` : alt);
   clips.length > 0 && (
     <section class="clips" id="clips" aria-labelledby="clips-h">
       <div class="clips__inner u-wrap">
-        <h2 class="clips__h reveal" id="clips-h">
+        <h2 class="clips__h u-title reveal" id="clips-h">
           Our Memories in Clips 📽️
           <span class="clips__count u-micro">{clips.length}</span>
         </h2>

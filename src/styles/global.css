@@ -158,6 +158,21 @@ li {
   overflow-wrap: break-word;
 }
 
+/* The four properties that make a section title a section title.
+   Global, and a class rather than a bare h2 rule, because Astro scopes
+   component styles: index.astro, Letter, ThingsList and timeline-a each
+   declared this identical block on their own, and ClipSheet — the fifth
+   section — simply forgot. So "Our Memories in Clips" rendered at the bare h2
+   default, 26px against every other heading's 48px, with optical sizing off
+   and no tracking. Nothing failed; the style just was not there.
+   One definition means the next section cannot silently opt out. */
+.u-title {
+  font-size: var(--text-title);
+  line-height: var(--lh-title);
+  letter-spacing: var(--track-title);
+  font-variation-settings: 'opsz' 96;
+}
+
 /* --------------------------------------------------------------- headings */
 /* Headings are INK, never burgundy. The accent earns its power from scarcity —
    at most twice per viewport. Last year indigo marked the hero AND every

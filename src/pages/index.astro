@@ -75,7 +75,7 @@ const links = [
 
   <section class="section" id="gallery" aria-labelledby="gallery-h">
     <div class="u-wrap">
-      <h2 class="section__h reveal" id="gallery-h">Our Memories in Photographs 📸</h2>
+      <h2 class="section__h u-title reveal" id="gallery-h">Our Memories in Photographs 📸</h2>
       <GalleryGrid items={year.gallery} />
     </div>
   </section>
@@ -88,7 +88,7 @@ const links = [
 
   <section class="section section--sunk" id="timeline" aria-labelledby="timeline-h">
     <div class="u-wrap">
-      <h2 class="section__h reveal" id="timeline-h">The journey</h2>
+      <h2 class="section__h u-title reveal" id="timeline-h">The journey</h2>
       {
         TIMELINE_DIRECTION === 'A' ? (
           <TimelineContactSheet years={timeline} />
@@ -119,10 +119,6 @@ const links = [
   }
 
   .section__h {
-    font-size: var(--text-title);
-    line-height: var(--lh-title);
-    letter-spacing: var(--track-title);
-    font-variation-settings: 'opsz' 96;
     margin-bottom: var(--space-12);
     scroll-margin-top: var(--space-16);
   }

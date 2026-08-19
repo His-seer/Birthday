@@ -45,7 +45,7 @@ const clipAspect = clip ? `${clip.width}:${clip.height}` : null;
 */}
 <section class="letter" id="letter" aria-labelledby="letter-h">
   <div class="letter__inner u-wrap">
-    <h2 class:list={['letter__h', 'reveal', spoken && 'letter__h--centred']} id="letter-h">
+    <h2 class:list={['letter__h', 'u-title', 'reveal', spoken && 'letter__h--centred']} id="letter-h">
       {isTodo(title) ? '' : title}
     </h2>
 
@@ -123,10 +123,6 @@ const clipAspect = clip ? `${clip.width}:${clip.height}` : null;
        Extend it to those and the accent stops meaning anything, exactly as the
        indigo did. */
     color: var(--burgundy);
-    font-size: var(--text-title);
-    line-height: var(--lh-title);
-    letter-spacing: var(--track-title);
-    font-variation-settings: 'opsz' 96;
     max-width: var(--measure);
     margin-bottom: var(--space-12);
   }
