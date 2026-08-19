@@ -144,6 +144,27 @@ const years = defineCollection({
         path: ['videoAlt'],
       }),
 
+    /**
+     * The closing write-up — the last words on the page, above the flourish.
+     *
+     * Distinct from `message`, which is the letter and sits SECOND by design
+     * (see index.astro). This is the 2025 edition's end-of-page note, which the
+     * client asked to keep: "I like that there was a write up at the end of the
+     * 2025 one". On the 2025 page that was `archive.closing`.
+     *
+     * OPTIONAL, and Closing.astro renders its rule with or without it — a year
+     * is allowed to end on the flourish alone. `salutation` and `signoff` are
+     * separate from `paragraphs` because they are set in the display face,
+     * not the body face.
+     */
+    farewell: z
+      .object({
+        salutation: z.string().min(1).optional(),
+        paragraphs: z.array(z.string().min(1)).min(1),
+        signoff: z.string().min(1).optional(),
+      })
+      .optional(),
+
     items: z
       .object({
         /** Optional film that carries the list instead of text. Same contract as

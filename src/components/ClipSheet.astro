@@ -30,25 +30,48 @@ const label = (alt: string, i: number) => (isTodo(alt) ? `Clip ${i + 1}` : alt);
     <section class="clips" id="clips" aria-labelledby="clips-h">
       <div class="clips__inner u-wrap">
         <h2 class="clips__h reveal" id="clips-h">
-          Clips
+          Our Memories in Clips 📽️
           <span class="clips__count u-micro">{clips.length}</span>
         </h2>
         <hr class="u-ornament clips__rule" />
-        <ul class="clips__grid" role="list">
-          {clips.map((clip, i) => (
-            <li class="clips__item reveal">
-              <VideoCard
-                src={clip.src}
-                alt={label(clip.alt, i)}
-                aspect={clip.aspect}
-                frameAspect={TILE}
-                expand
-                title={label(clip.alt, i)}
-                sizes="(max-width: 560px) 44vw, (max-width: 900px) 30vw, 200px"
-              />
-            </li>
-          ))}
-        </ul>
+        {/* Same peek rail as the photographs — see GalleryGrid for the full
+            reasoning. It matters more here than there: 34 clips one-at-a-time
+            would be 34 swipes, so the contact-sheet density that made this a
+            grid is preserved by keeping several tiles on screen per view. */}
+        <div class="rail">
+          <ul
+            class="clips__grid"
+            role="list"
+            tabindex="0"
+            data-rail-track
+            aria-label="Clips — swipe or scroll sideways"
+          >
+            {clips.map((clip, i) => (
+              <li class="clips__item reveal">
+                <VideoCard
+                  src={clip.src}
+                  alt={label(clip.alt, i)}
+                  aspect={clip.aspect}
+                  frameAspect={TILE}
+                  expand
+                  title={label(clip.alt, i)}
+                  sizes="(max-width: 640px) 40vw, (max-width: 1024px) 22vw, 200px"
+                />
+              </li>
+            ))}
+          </ul>
+
+          <button class="rail__nav rail__nav--prev" type="button" aria-label="Previous clips">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <path d="M15 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          <button class="rail__nav rail__nav--next" type="button" aria-label="More clips">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </div>
       </div>
     </section>
   )
@@ -75,22 +98,99 @@ const label = (alt: string, i: number) => (isTodo(alt) ? `Clip ${i + 1}` : alt);
     margin-block: var(--space-4) var(--space-8);
   }
 
-  /* auto-fill, not auto-fit: a short final row keeps the tile size the rest of
-     the sheet uses instead of stretching two clips across the full width. */
+  .rail {
+    position: relative;
+  }
+
   .clips__grid {
-    display: grid;
-    /* 120px, not 150px. At a 375px viewport the content box is ~295px, so a
-       150px minimum could only fit ONE column — turning a contact sheet into a
-       34-item vertical scroll, which is the opposite of a sheet. 120px yields
-       two columns on a phone and scales up from there. */
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    display: flex;
     gap: var(--space-4);
     margin: 0;
     padding: 0;
+    padding-block: var(--space-2);
     list-style: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    align-items: flex-start;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--hairline) transparent;
   }
 
+  .clips__grid::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .clips__grid::-webkit-scrollbar-thumb {
+    background: var(--hairline);
+    border-radius: 999px;
+  }
+
+  .clips__grid:focus-visible {
+    outline: 2px solid var(--burgundy);
+    outline-offset: 4px;
+  }
+
+  /* 40%, so a 375px viewport still shows ~2.5 tiles at ~118px — the same tile
+     size the old `minmax(120px, 1fr)` grid produced. The half-tile is the cue
+     that the rail continues; a whole number of tiles would look like the end. */
   .clips__item {
     margin: 0;
+    flex: 0 0 40%;
+    scroll-snap-align: center;
+  }
+
+  @media (min-width: 40rem) {
+    .clips__item {
+      flex-basis: 22%;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .clips__item {
+      flex-basis: 15.5%;
+    }
+  }
+
+  .rail__nav {
+    position: absolute;
+    top: 40%;
+    z-index: 2;
+    display: none;
+    place-items: center;
+    width: var(--tap-min);
+    height: var(--tap-min);
+    border-radius: 50%;
+    background: var(--paper);
+    color: var(--ink);
+    box-shadow: var(--elev-photo);
+    cursor: pointer;
+    transition: opacity var(--dur-mid) var(--ease);
+  }
+
+  .rail__nav--prev {
+    left: calc(var(--space-4) * -1);
+  }
+
+  .rail__nav--next {
+    right: calc(var(--space-4) * -1);
+  }
+
+  .rail__nav[disabled] {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .rail__nav {
+      display: grid;
+    }
   }
 </style>
+
+<script>
+  import { initRails } from '../lib/rail';
+
+  initRails();
+</script>

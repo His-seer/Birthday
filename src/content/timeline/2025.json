@@ -179,18 +179,6 @@
         "aspect": "16:9",
         "poster": "timeline/2025/23-reasons-why-poster"
       }
-    },
-    {
-      "id": "family-bonding-timeee",
-      "date": "2025-11-07",
-      "title": "Family bonding timeee",
-      "story": "TODO-CONTENT",
-      "media": {
-        "kind": "image",
-        "src": "timeline/2025/family-bonding-timeee",
-        "alt": "TODO-CONTENT",
-        "aspect": "83:180"
-      }
     }
   ]
 }

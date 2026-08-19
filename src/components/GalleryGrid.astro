@@ -49,10 +49,35 @@ const resolved = items.map((item, i) => {
   DEVIATION FROM DESIGN.md, stated: it recommends promoting 2-3 photos to
   FULL-WIDTH plates. All 13 of these photos are portrait (verified), and a
   full-width portrait at a 1200px content width renders ~1600px tall — a
-  screen and a half for one image. Plates here span two grid columns instead,
+  screen and a half for one image. Plates here get a wider rail tile instead,
   which delivers the intended rhythm at a sane height.
+
+  2026 CLIENT REVISION — grid becomes a horizontal PEEK RAIL.
+  Asked for: "can it be a swiping thing instead of scrolling? Then he can tap
+  it if he wants it in full view."
+
+  This is NOT a walk-back to last year's 3D carousel, and the distinction is
+  the whole point. What AUDIT M1/M3/M7 condemned was: autoplay every 4s with no
+  pause control (WCAG 2.2.2), a stage hard-coded to 400x300px, eleven photos at
+  opacity:0 that still downloaded 806 KB, and nav buttons ~200px from the thing
+  they controlled. None of that is reintroduced here — this rail has no
+  autoplay, no timers, no hidden-but-loaded images, it is pure CSS scroll-snap
+  (browsing costs zero JS), and its controls sit on the rail itself.
+
+  What IS conceded is DESIGN.md 2.5's adjacency argument — "this content needs
+  comparison-across-photos". A peek layout is the compromise: 2-3 tiles stay
+  on screen at every breakpoint, so adjacency survives at reduced range rather
+  than being destroyed by construction the way a one-at-a-time carousel does.
+  Native aspect is still preserved; portrait stays portrait.
 */}
-<ul class="gallery" role="list">
+<div class="rail">
+  <ul
+    class="gallery"
+    role="list"
+    tabindex="0"
+    data-rail-track
+    aria-label="Photographs — swipe or scroll sideways"
+  >
   {
     resolved.map((item) => (
       <li class:list={['gallery__cell', item.plate && 'gallery__cell--plate']}>
@@ -84,7 +109,29 @@ const resolved = items.map((item, i) => {
       </li>
     ))
   }
-</ul>
+  </ul>
+
+  {/* Touch gets swipe for free; a mouse does not. AUDIT M3 flagged last year's
+      controls for sitting ~200px from the stage and for 40x40 tap targets, so
+      these are anchored to the rail edge and are var(--tap-min) square.
+
+      These are REAL controls, not aria-hidden decoration. The first pass hid
+      them from assistive tech on the reasoning that the rail is already
+      keyboard-scrollable — but an unnamed <button> is a bare stop for anyone
+      who reaches it, and hiding a visible control is how you get an element
+      that a screen reader denies exists while a sighted keyboard user is
+      looking straight at it. verify.mjs's a11y gate rejected it, correctly. */}
+  <button class="rail__nav rail__nav--prev" type="button" aria-label="Previous photographs">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+      <path d="M15 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </button>
+  <button class="rail__nav rail__nav--next" type="button" aria-label="More photographs">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+      <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </button>
+</div>
 
 {/* Native <dialog> gives focus trapping, Escape-to-close and inertness for
     free — all of which the old carousel lacked entirely. */}
@@ -117,19 +164,49 @@ const resolved = items.map((item, i) => {
 </div>
 
 <style>
+  .rail {
+    position: relative;
+  }
+
   .gallery {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: grid;
-    grid-template-columns: 1fr;
+    display: flex;
     gap: var(--space-6);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    /* Tops align; a rail of portraits at native aspect would otherwise stretch
+       every tile to the tallest one and re-crop what AUDIT H3.1 fixed. */
+    align-items: flex-start;
+    /* Keeps a swipe on the rail from turning into a browser back-navigation. */
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    /* Room for the shadow, which a plain overflow container would clip. */
+    padding-block: var(--space-2);
+  }
+
+  .gallery:focus-visible {
+    outline: 2px solid var(--burgundy);
+    outline-offset: 4px;
+  }
+
+  /* PEEK, at every breakpoint. The basis is deliberately never 100% — a tile
+     that fills the viewport is the one-at-a-time carousel DESIGN.md 2.5 argued
+     against, and the partial neighbour is also what signals "this scrolls"
+     without needing an instruction. */
+  .gallery__cell {
+    flex: 0 0 78%;
+    scroll-snap-align: center;
   }
 
   @media (min-width: 40rem) {
     .gallery {
-      grid-template-columns: repeat(2, 1fr);
       gap: var(--space-8);
+    }
+
+    .gallery__cell {
+      flex-basis: 44%;
     }
   }
 
@@ -137,12 +214,65 @@ const resolved = items.map((item, i) => {
      media query in the entire public stylesheet, at 768px, so 834px was
      completely unhandled. */
   @media (min-width: 64rem) {
-    .gallery {
-      grid-template-columns: repeat(3, 1fr);
+    .gallery__cell {
+      flex-basis: 30%;
     }
 
     .gallery__cell--plate {
-      grid-column: span 2;
+      flex-basis: 46%;
+    }
+  }
+
+  /* A visible, slim scrollbar is an affordance, not clutter — it is the only
+     persistent cue on desktop that there is more rail to the right. */
+  .gallery {
+    scrollbar-width: thin;
+    scrollbar-color: var(--hairline) transparent;
+  }
+
+  .gallery::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .gallery::-webkit-scrollbar-thumb {
+    background: var(--hairline);
+    border-radius: 999px;
+  }
+
+  .rail__nav {
+    position: absolute;
+    top: 40%;
+    z-index: 2;
+    display: none;
+    place-items: center;
+    width: var(--tap-min);
+    height: var(--tap-min);
+    border-radius: 50%;
+    background: var(--paper);
+    color: var(--ink);
+    box-shadow: var(--elev-photo);
+    cursor: pointer;
+    transition: opacity var(--dur-mid) var(--ease);
+  }
+
+  .rail__nav--prev {
+    left: calc(var(--space-4) * -1);
+  }
+
+  .rail__nav--next {
+    right: calc(var(--space-4) * -1);
+  }
+
+  .rail__nav[disabled] {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Pointer-only. On touch the swipe IS the control, and these would just sit
+     on top of the photographs — which is exactly what AUDIT M3 called out. */
+  @media (hover: hover) and (pointer: fine) {
+    .rail__nav {
+      display: grid;
     }
   }
 
@@ -241,6 +371,10 @@ const resolved = items.map((item, i) => {
 </style>
 
 <script>
+  import { initRails } from '../lib/rail';
+
+  initRails();
+
   const dialog = document.querySelector<HTMLDialogElement>('.lightbox');
   const stage = document.querySelector<HTMLElement>('.lightbox__stage');
   const sources = document.querySelector<HTMLElement>('.gallery__sources');
@@ -254,7 +388,15 @@ const resolved = items.map((item, i) => {
 
         const clone = source.cloneNode(true) as HTMLElement;
         clone.removeAttribute('hidden');
-        const img = clone.querySelector('img');
+
+        /* `data-full` is forwarded by <Picture> onto the <img> ITSELF, not onto
+           a wrapping <picture>. So `source` is already the image, and the old
+           `clone.querySelector('img')` returned null — which silently skipped
+           the whole block below it. Result: every lightbox image opened with
+           alt="" (the full-view photo was anonymous to a screen reader) and
+           kept loading="lazy" instead of being upgraded to eager.
+           Handle both shapes rather than assuming either. */
+        const img = clone instanceof HTMLImageElement ? clone : clone.querySelector('img');
         const trigger = button.querySelector('img');
         if (img && trigger) {
           img.setAttribute('alt', trigger.getAttribute('alt') ?? '');

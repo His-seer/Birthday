@@ -1,10 +1,18 @@
 ---
+interface Farewell {
+  salutation?: string;
+  paragraphs: string[];
+  signoff?: string;
+}
+
 interface Props {
   name: string;
   year: number;
+  /** The last words on the page. Optional — a year may end on the rule alone. */
+  farewell?: Farewell;
 }
 
-const { name, year } = Astro.props;
+const { name, year, farewell } = Astro.props;
 ---
 
 {/*
@@ -22,6 +30,22 @@ const { name, year } = Astro.props;
 */}
 <section class="closing" aria-label="Closing">
   <div class="closing__inner u-wrap">
+    {/* The end-of-page write-up, restored from the 2025 edition at the client's
+        request. It sits ABOVE the rule deliberately: the flourish is the last
+        thing that happens, so the rule drawing itself now reads as a line
+        being drawn under what was just said, rather than as a divider before
+        a signature. */}
+    {
+      farewell && (
+        <div class="farewell">
+          {farewell.salutation && <p class="farewell__salutation">{farewell.salutation}</p>}
+          {farewell.paragraphs.map((p) => (
+            <p class="farewell__p">{p}</p>
+          ))}
+          {farewell.signoff && <p class="farewell__signoff">{farewell.signoff}</p>}
+        </div>
+      )
+    }
     <div class="closing__rule" aria-hidden="true"><span></span></div>
     <p class="closing__mark">
       <span class="closing__name">{name}</span>
@@ -63,6 +87,41 @@ const { name, year } = Astro.props;
     .closing__rule span {
       transform: scaleX(1);
     }
+  }
+
+  /* --measure, not the section's --wide-max. The rule and the signature mark
+     are furniture and may span the full width; this is prose, and prose gets
+     the same 65ch line length the letter uses. */
+  .farewell {
+    max-width: var(--measure);
+    margin-bottom: var(--space-12);
+  }
+
+  .farewell__salutation {
+    font-family: var(--font-display);
+    font-size: var(--text-subhead);
+    font-variation-settings: 'opsz' 72, 'WONK' 1;
+    color: var(--ink);
+    margin-bottom: var(--space-6);
+  }
+
+  .farewell__p {
+    font-size: var(--text-body-lg);
+    line-height: var(--lh-body-lg);
+    color: var(--ink);
+  }
+
+  .farewell__p + .farewell__p {
+    margin-top: var(--space-5);
+  }
+
+  /* Matches .letter__closing-line: the burgundy lead is what marks a line as
+     the one being landed on, and this page should only have one such voice. */
+  .farewell__signoff {
+    margin-top: var(--space-8);
+    font-size: var(--text-lead);
+    line-height: var(--lh-lead);
+    color: var(--burgundy);
   }
 
   .closing__mark {

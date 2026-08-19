@@ -32,6 +32,13 @@
     "video": "timeline/2026/hero-video",
     "videoAlt": "TODO-CONTENT"
   },
+  "farewell": {
+    "salutation": "My Ish,",
+    "paragraphs": [
+      "Today, I celebrate the man, partner, leader, friend, son, and brother you are. You’re a light that shines ever so brightly. I see how much of yourself you pour into all you do and those around you, and how much you’ve grown in the past year (both internally and externally 😉), and I’m in awe to say the least. Sometimes I can’t believe that you’re actually mine but I know I scored big time!"
+    ],
+    "signoff": "Happy birthday my Brucey, it’s infinity and beyond with us… and I love you more ❤️"
+  },
   "items": {
     "titleTemplate": "{count} Things I love about {name}",
     "titleName": "Bruce",
